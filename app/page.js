@@ -1,6 +1,8 @@
+"use client"
 import Image from 'next/image'
 import styles from './page.module.css'
-
+import { useEffect, useState } from 'react';
+// SSR - CSR 
 // Component
 // Functional Component - Class Based Component
 // <div class="x"> </div>
@@ -19,19 +21,34 @@ export default function Home() {
   // forEach
   // map
   // jsx içerisinde iterasyonlar her zaman map ile yapılmalı.
+  // iterasyon sonucu ortaya çıkan jsx elemanlarının parentina key value verilmeli
+  let number = 0;
+  // ekranda değişikliği takip edilmesi gereken (watchable)
+  // değişkenler reactin belirlediği şekilde oluşturulmalı.
+
+  // React Hooks => useX useY
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    console.log(count);
+  }, [count]); // deplist
+
+  useEffect(() => {
+    console.log("sayfa  yüklendi");
+  },[])
+  // n adet useEffect n adet useState
+  // watcher
   return (
     <>
-      <div>
-        Merhaba, hoşgeldiniz {name}
-        <div>
-          <ul>
-            {cars.map(car => <li>{car}</li>)}
-          </ul>
-        </div>
-        <button onClick={() => {alert("Butona tıklandı.")}}>Uyarı</button>
-        <button onClick={clickFunction}>Uyarı</button>
-      </div>
-      <div></div>
+      <p> Sayı: {count}  </p>
+      <button onClick={() => {
+        setCount(count + 1); // async ve await yok
+      }}> Arttır </button>
+      <br />
+      <button onClick={() => {
+        setCount(count - 1)
+      }}> Azalt </button>
+      <br />
+      <button onClick={() => console.log(count)}>Konsola Yazdır</button>
     </>
   )
 }
