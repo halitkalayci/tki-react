@@ -38,7 +38,7 @@ export default function Home() {
   // n adet useEffect n adet useState
   // watcher
   return (
-    <>
+    <main className={styles.main}>
       <p> Sayı: {count}  </p>
       <button onClick={() => {
         setCount(count + 1); // async ve await yok
@@ -49,6 +49,6 @@ export default function Home() {
       }}> Azalt </button>
       <br />
       <button onClick={() => console.log(count)}>Konsola Yazdır</button>
-    </>
+    </main>
   )
 }
