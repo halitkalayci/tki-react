@@ -1,8 +1,10 @@
 "use client"
 import React from 'react'
 import styles from '../page.module.css'
-import { Field, Form, Formik } from 'formik'
+import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { Button } from 'primereact/button'
+import * as Yup from "yup";
+
 function FormikRegister() {
 
     const initialValues = {
@@ -13,15 +15,23 @@ function FormikRegister() {
         email: '',
         ipAddress: ''
     }
+    const validationSchema = Yup.object().shape({
+        firstName: Yup.string().required().min(2),
+        lastName: Yup.string().required(),
+        password: Yup.string().required(),
+        passwordConfirm: Yup.string().required(),
+        email: Yup.string().required()
+    })
     return (
         <main className={styles.main}>
-            <Formik initialValues={initialValues} onSubmit={(values) => {
+            <Formik validationSchema={validationSchema} initialValues={initialValues} onSubmit={(values) => {
                 console.log(values);
             }}>
                 <Form>
                     <div className='form-group'>
                         <label>Ad</label>
                         <Field name="firstName" type="text" />
+                        <ErrorMessage name="firstName"></ErrorMessage>
                     </div>
 
                     <div className='form-group'>
