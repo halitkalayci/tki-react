@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 // Functional Component - Class Based Component
 // <div class="x"> </div>
 
+
+// <link href="global.css"/>
 // JSX içerisinde javascript yazmak istediğimizde {} kullanıyoruz
 export default function Home() {
   let name = "Halit"; // API isteği?
@@ -22,26 +24,44 @@ export default function Home() {
   // map
   // jsx içerisinde iterasyonlar her zaman map ile yapılmalı.
   // iterasyon sonucu ortaya çıkan jsx elemanlarının parentina key value verilmeli
-  let number = 0;
+
   // ekranda değişikliği takip edilmesi gereken (watchable)
   // değişkenler reactin belirlediği şekilde oluşturulmalı.
 
   // React Hooks => useX useY
+  // useEffect => sayfa açılışı ve depList'deki değerlerin değişimini takip etme olanağı
+  let number = 0; // klasik javascript variable tanımlama syntaxi
   const [count, setCount] = useState(0);
+      // getter  setter
+
   useEffect(() => {
     console.log(count);
-  }, [count]); // deplist
+  }, [count]); 
+  // custom watcher
 
   useEffect(() => {
     console.log("sayfa  yüklendi");
-  },[])
+  },[]);
   // n adet useEffect n adet useState
   // watcher
+
+  // class => className 
+
+  // tek bir dosyada html içinde js çalıştırabilmek
+  // {}
+  // CTRL + SPACE => Intellisense'i trigger eder
+
+  // Arrow Anonm. Function =>  () => {}
+  // Classic Anonm. Function => function() { }
+  
+  // Arrow Function => const increase = () => {}
+  // Classic Function => function increase() {}
+  
   return (
     <main className={styles.main}>
       <p> Sayı: {count}  </p>
       <button onClick={() => {
-        setCount(count + 1); // async ve await yok
+        setCount(count + 1);
       }}> Arttır </button>
       <br />
       <button onClick={() => {
@@ -49,6 +69,22 @@ export default function Home() {
       }}> Azalt </button>
       <br />
       <button onClick={() => console.log(count)}>Konsola Yazdır</button>
+
+
+      <p>************</p>
+
+      <p> Sayı: {number}  </p>
+      <button onClick={() => {
+        number++
+      }}> Arttır </button>
+      <br />
+      <button onClick={() => {
+        number--
+      }}> Azalt </button>
+      <br />
+      <button onClick={() => console.log(number)}>Konsola Yazdır</button>
+
     </main>
   )
 }
+// Single Page Application => Javascript => React (Next.Js),Angular,Vue,Svelte
