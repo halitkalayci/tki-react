@@ -110,3 +110,14 @@ a {
 .w-100{
   width:100%;
 }
+.form-group{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: flex-start;
+  align-items: baseline;
+}
+
+form>div{
+  margin-bottom:12px;
+}

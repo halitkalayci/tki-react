@@ -1,8 +1,11 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styles from '../page.module.css'
 import axios from 'axios'
-
+import {Button} from "primereact/button";
+import {InputText} from "primereact/inputtext"
+import { Toast } from 'primereact/toast';
+import { useRouter } from 'next/navigation';
 function Register() {
 
     const [firstName, setFirstName] = useState("")
@@ -10,46 +13,59 @@ function Register() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [passwordConfirm, setPasswordConfirm] = useState("")
-
+    const toast = useRef(null);
+    const navigate = useRouter();
 
     const register = () => {
         let object = {firstName,lastName,email,password,passwordConfirm,IPAddress:"123"};
         console.log(object);
         
-        // şifreler uyuşmalı 
-        // firstname en az 3 hane olmalı
+        if(object.password != passwordConfirm)
+        {
+            toast.current.show({severity:'error', summary:'Başarısız',detail:'Şifreler uyuşmuyor'});
+            return;
+        }
 
-        axios.post('https://localhost:7206/api/Auth/Register',object).then(response=>console.log(response));
+        axios.post('https://localhost:7206/api/Auth/Register',object)
+        .then(response=>{
+            toast.current.show({severity:'success', summary:'Başarılı',detail:'Başarıyla kayıt olundu.'});
+            navigate.push("/");
+        })
+        .catch(error=>{
+            console.log(error);
+            toast.current.show({severity:'error', summary:'Başarısız',detail:error.response.data.detail});
+        });
         
     }
 
     return (
         <main className={styles.main}>
+            <Toast ref={toast}></Toast>
             <h3>Register Page</h3>
             <form>
-                <div>
+                <div className='form-group'>
                     <label>Ad</label>
-                    <input value={firstName} onChange={(e)=>setFirstName(e.target.value)} type="text" placeholder='Ad' />
+                    <InputText value={firstName} onChange={(e)=>setFirstName(e.target.value)} type="text" placeholder='Ad' />
                 </div>
 
-                <div>
+                <div className='form-group'>
                     <label>Soyad</label>
-                    <input value={lastName} onChange={(e)=>setLastName(e.target.value)} type="text" placeholder='Soyad' />
+                    <InputText value={lastName} onChange={(e)=>setLastName(e.target.value)} type="text" placeholder='Soyad' />
                 </div>
-                <div>
+                <div className='form-group'>
                     <label>E-posta</label>
-                    <input value={email} onChange={(e)=>setEmail(e.target.value)} type="text" placeholder='E-posta' />
+                    <InputText value={email} onChange={(e)=>setEmail(e.target.value)} type="text" placeholder='E-posta' />
                 </div>
-                <div>
+                <div className='form-group'>
                     <label>Şifre</label>
-                    <input value={password} onChange={(e)=>setPassword(e.target.value)}  type="password" placeholder='******' />
+                    <InputText value={password} onChange={(e)=>setPassword(e.target.value)}  type="password" placeholder='******' />
                 </div>
-                <div>
+                <div className='form-group'>
                     <label>Şifre Tekrar</label>
-                    <input value={passwordConfirm} onChange={(e)=>setPasswordConfirm(e.target.value)} type="password" placeholder='******' />
+                    <InputText value={passwordConfirm} onChange={(e)=>setPasswordConfirm(e.target.value)} type="password" placeholder='******' />
                 </div>
-                <div>
-                    <button className='w-100' onClick={register} type='button'>Kayıt Ol</button>
+                <div className='form-group'>
+                    <Button label='Kayıt Ol' className='w-100' onClick={register} type='button'></Button>
                 </div>
             </form>
         </main>
