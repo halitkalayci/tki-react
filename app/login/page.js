@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../page.module.css'
 import axios from 'axios'
+
+// Folder Structure Routing
 function Login() {
     // HTTP Isteği
 
@@ -27,7 +29,8 @@ function Login() {
         let object = { email, password };
         console.log(object); 
 
-        axios.post("https://localhost:7206/api/Auth", object).then(response=>{
+        axios.post("https://localhost:7206/api/Auth", object)
+        .then(response=>{
             alert("giriş yapıldı")
         }).catch(error => alert("HATALI GİRİŞ"));
     }

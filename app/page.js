@@ -2,6 +2,7 @@
 import Image from 'next/image'
 import styles from './page.module.css'
 import { useEffect, useState } from 'react';
+import CarList from './components/car-list/CarList';
 // SSR - CSR 
 // Component
 // Functional Component - Class Based Component
@@ -17,7 +18,7 @@ export default function Home() {
   let cars = ["BMW", "TOGG", "Mercedes", "Fiat"]
 
 
-  let clickFunction = () => {
+  const clickFunction = () => {
     alert("Butona tıklandı.")
   }
   // forEach
@@ -70,7 +71,6 @@ export default function Home() {
       <br />
       <button onClick={() => console.log(count)}>Konsola Yazdır</button>
 
-
       <p>************</p>
 
       <p> Sayı: {number}  </p>
@@ -84,7 +84,13 @@ export default function Home() {
       <br />
       <button onClick={() => console.log(number)}>Konsola Yazdır</button>
 
+
+
+      <CarList brand="BMW" model="520" year="2023" /> 
+      <CarList brand="Mercedes" model="e60" year="2012"/> 
+
     </main>
   )
 }
+// Component-Base
 // Single Page Application => Javascript => React (Next.Js),Angular,Vue,Svelte
