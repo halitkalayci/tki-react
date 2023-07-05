@@ -1,9 +1,10 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import styles from '../page.module.css'
 import axios from 'axios'
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
+import './login.css';
+import styles from '../page.module.css'
 // Folder Structure Routing
 function Login() {
     // HTTP Isteği
@@ -41,16 +42,16 @@ function Login() {
         <main className={styles.main}>
             <h3>Login Page</h3>
             <form>
-                <div>
+                <div className='form-group'>
                     <label>E-posta</label>
                     <InputText onChange={(e) => setEmail(e.target.value)} value={email} type="text" placeholder='E-posta' />
                 </div>
-                <div>
+                <div className='form-group'>
                     <label>Şifre</label>
                     <InputText onChange={(e)=>setPassword(e.target.value)} value={password} type="password" placeholder='******' />
                 </div>
                 <div>
-                    <Button severity='success' label="Giriş Yap" type='button' onClick={submit}></Button>
+                    <Button className='w-100' severity='success' label="Giriş Yap" type='button' onClick={submit}></Button>
                 </div>
             </form>
         </main>

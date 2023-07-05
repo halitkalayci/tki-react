@@ -49,7 +49,7 @@ function Register() {
                     <input value={passwordConfirm} onChange={(e)=>setPasswordConfirm(e.target.value)} type="password" placeholder='******' />
                 </div>
                 <div>
-                    <button onClick={register} type='button'>Kayıt Ol</button>
+                    <button className='w-100' onClick={register} type='button'>Kayıt Ol</button>
                 </div>
             </form>
         </main>
