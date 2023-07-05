@@ -3,6 +3,8 @@ import Image from 'next/image'
 import styles from './page.module.css'
 import { useEffect, useState } from 'react';
 import CarList from './components/car-list/CarList';
+
+import { Button } from 'primereact/button';
 // SSR - CSR 
 // Component
 // Functional Component - Class Based Component
@@ -61,6 +63,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <p> Sayı: {count}  </p>
+      <Button label="Arttır" icon="pi pi-check" />
       <button onClick={() => {
         setCount(count + 1);
       }}> Arttır </button>

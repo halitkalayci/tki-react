@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../page.module.css'
 import axios from 'axios'
-
+import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
 // Folder Structure Routing
 function Login() {
     // HTTP Isteği
@@ -36,21 +37,20 @@ function Login() {
     }
     // one way data binding 
     // two way data binding
-
     return (
         <main className={styles.main}>
             <h3>Login Page</h3>
             <form>
                 <div>
                     <label>E-posta</label>
-                    <input onChange={(e) => setEmail(e.target.value)} value={email} type="text" placeholder='E-posta' />
+                    <InputText onChange={(e) => setEmail(e.target.value)} value={email} type="text" placeholder='E-posta' />
                 </div>
                 <div>
                     <label>Şifre</label>
-                    <input onChange={(e)=>setPassword(e.target.value)} value={password} type="password" placeholder='******' />
+                    <InputText onChange={(e)=>setPassword(e.target.value)} value={password} type="password" placeholder='******' />
                 </div>
                 <div>
-                    <button type='button' onClick={submit}>Giriş Yap</button>
+                    <Button severity='success' label="Giriş Yap" type='button' onClick={submit}></Button>
                 </div>
             </form>
         </main>
