@@ -6,6 +6,7 @@ import { InputText } from 'primereact/inputtext';
 import './login.css';
 import styles from '../page.module.css'
 import { Toast } from 'primereact/toast';
+import { useRouter } from 'next/navigation';
 // Folder Structure Routing
 function Login() {
     // HTTP Isteği
@@ -29,18 +30,21 @@ function Login() {
     // useReference => react'daki elementlerin referans olarak bir değişkene atanması işlevi
     // başlangıç genelde null olur => site yüklenene kadar reference boş
     const toastReference = useRef(null);
+    const navigate = useRouter();
 
     const submit = () => {
         //console.log( { email: email, password: password } );
         let object = { email, password };
-        console.log(object); 
+        console.log(object);
 
         axios.post("https://localhost:7206/api/Auth", object)
-        .then(response=>{
-            toastReference.current.show({ severity: 'success', summary: 'Başarılı', detail: 'Başarıyla Giriş Yapıldı' });
-        }).catch(error => {
-            toastReference.current.show({ severity: 'error', summary: 'Hatalı', detail: 'Giriş Yapılamadı' });
-        });
+            .then(response => {
+                debugger;
+                toastReference.current.show({ severity: 'success', summary: 'Başarılı', detail: 'Başarıyla Giriş Yapıldı' });
+                navigate.push("/")
+            }).catch(error => {
+                toastReference.current.show({ severity: 'error', summary: 'Hatalı', detail: 'Giriş Yapılamadı' });
+            });
     }
     // one way data binding 
     // two way data binding
@@ -55,7 +59,7 @@ function Login() {
                 </div>
                 <div className='form-group'>
                     <label>Şifre</label>
-                    <InputText onChange={(e)=>setPassword(e.target.value)} value={password} type="password" placeholder='******' />
+                    <InputText onKeyDown={(e) => { if (e.key == 'Enter') submit()}} onChange={(e) => setPassword(e.target.value)} value={password} type="password" placeholder='******' />
                 </div>
                 <div>
                     <Button className='w-100' severity='success' label="Giriş Yap" type='button' onClick={submit}></Button>
