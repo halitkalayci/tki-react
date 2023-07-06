@@ -3,7 +3,7 @@ import Image from 'next/image'
 import styles from './page.module.css'
 import { useEffect, useState } from 'react';
 import CarList from './components/car-list/CarList';
-
+import { Paginator } from 'primereact/paginator';
 import { Button } from 'primereact/button';
 import axios from 'axios';
 import axiosInstance from './utilities/axiosInterceptors';
@@ -76,6 +76,10 @@ export default function Home() {
        {cars.map(car => <div key={car.id} className='col-3 mb-3'> 
         <CarList car={car}></CarList>
        </div>)}
+
+       <div className='col-12'>
+       <Paginator rows={5} totalRecords={cars.length} rowsPerPageOptions={[10, 20, 30]} onPageChange={(e) => console.log(e)}  />
+       </div>
       </div>
     </main>
   )
