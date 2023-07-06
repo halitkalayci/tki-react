@@ -1,12 +1,13 @@
 "use client"
 import Image from 'next/image'
 import styles from './page.module.css'
-import { useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import CarList from './components/car-list/CarList';
 import { Paginator } from 'primereact/paginator';
 import { Button } from 'primereact/button';
 import axios from 'axios';
 import axiosInstance from './utilities/axiosInterceptors';
+import { AuthContext } from './contexts/AuthContext';
 // SSR - CSR 
 // Component
 // Functional Component - Class Based Component
@@ -42,14 +43,15 @@ export default function Home() {
     console.log(count);
   }, [count]); 
   // custom watcher
+  const authContext = useContext(AuthContext);
 
   useEffect(() => {
+    console.log(authContext);
     fetchCarsFromAPI();
   },[]);
 
   const [cars, setCars] = useState({})
   const [pagination, setPagination] = useState({pageIndex:0, pageSize:2})
-
   const fetchCarsFromAPI = () => {
     axiosInstance.get('Cars?PageIndex=' + pagination.pageIndex + '&PageSize=' + pagination.pageSize)
     .then(response=> {
@@ -88,7 +90,7 @@ export default function Home() {
        </div>)}
 
        <div className='col-12'>
-       <Paginator  rows={2} totalRecords={cars.count} onPageChange={onPageChange}  />
+       <Paginator rows={2} totalRecords={cars.count} onPageChange={onPageChange}  />
        </div>
       </div> 
     </main>

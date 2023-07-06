@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
@@ -7,6 +7,7 @@ import './login.css';
 import styles from '../page.module.css'
 import { Toast } from 'primereact/toast';
 import { useRouter } from 'next/navigation';
+import { AuthContext } from '../contexts/AuthContext';
 // Folder Structure Routing
 function Login() {
     // HTTP Isteği
@@ -24,6 +25,12 @@ function Login() {
     //         .then((response)=> response.json())
     //         .then(json => setCarCount(json.items.length));
     //   }, [])
+
+    const authContext = useContext(AuthContext);
+
+    useEffect(() => {
+        console.log(authContext);
+    },[])
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
