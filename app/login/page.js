@@ -39,7 +39,9 @@ function Login() {
 
         axios.post("https://localhost:7206/api/Auth", object)
             .then(response => {
-                debugger;
+                // gelen cevaptan tokeni okuma
+                let token = response.data.accessToken.token;
+                localStorage.setItem('token', token);
                 toastReference.current.show({ severity: 'success', summary: 'Başarılı', detail: 'Başarıyla Giriş Yapıldı' });
                 navigate.push("/")
             }).catch(error => {

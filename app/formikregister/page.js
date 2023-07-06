@@ -4,6 +4,7 @@ import styles from '../page.module.css'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { Button } from 'primereact/button'
 import * as Yup from "yup";
+import { InputText } from 'primereact/inputtext'
 
 function FormikRegister() {
 
@@ -30,7 +31,7 @@ function FormikRegister() {
                 <Form>
                     <div className='form-group'>
                         <label>Ad</label>
-                        <Field name="firstName" type="text" />
+                        <InputText  name="firstName" type="text" />
                         <ErrorMessage name="firstName"></ErrorMessage>
                     </div>
 
