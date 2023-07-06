@@ -51,6 +51,7 @@ function Login() {
                 localStorage.setItem('token', token);
                 toastReference.current.show({ severity: 'success', summary: 'Başarılı', detail: 'Başarıyla Giriş Yapıldı' });
                 navigate.push("/")
+                authContext.setIsAuthenticated(true);
             }).catch(error => {
                 toastReference.current.show({ severity: 'error', summary: 'Hatalı', detail: 'Giriş Yapılamadı' });
             });

@@ -5,6 +5,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css"
 import "primereact/resources/primereact.min.css";   
 import "bootstrap/dist/css/bootstrap.min.css"
 import { AuthContext, AuthProvider } from './contexts/AuthContext';
+import Navbar from './components/navbar/Navbar';
 
 // Global importlar burada.
 
@@ -19,7 +20,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <Navbar></Navbar>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )

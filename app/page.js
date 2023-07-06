@@ -8,6 +8,7 @@ import { Button } from 'primereact/button';
 import axios from 'axios';
 import axiosInstance from './utilities/axiosInterceptors';
 import { AuthContext } from './contexts/AuthContext';
+import Navbar from './components/navbar/Navbar';
 // SSR - CSR 
 // Component
 // Functional Component - Class Based Component
