@@ -8,6 +8,7 @@ import styles from '../page.module.css'
 import { Toast } from 'primereact/toast';
 import { useRouter } from 'next/navigation';
 import { AuthContext } from '../contexts/AuthContext';
+import jwt_decode from "jwt-decode";
 // Folder Structure Routing
 function Login() {
     // HTTP Isteği
@@ -48,6 +49,8 @@ function Login() {
             .then(response => {
                 // gelen cevaptan tokeni okuma
                 let token = response.data.accessToken.token;
+                const decodedToken = jwt_decode(token);
+                console.log(decodedToken);
                 localStorage.setItem('token', token);
                 toastReference.current.show({ severity: 'success', summary: 'Başarılı', detail: 'Başarıyla Giriş Yapıldı' });
                 navigate.push("/")

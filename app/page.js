@@ -47,7 +47,7 @@ export default function Home() {
   const authContext = useContext(AuthContext);
 
   useEffect(() => {
-    console.log(authContext);
+    console.log(authContext.getDecodedToken());
     fetchCarsFromAPI();
   },[]);
 

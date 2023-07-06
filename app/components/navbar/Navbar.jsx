@@ -1,10 +1,15 @@
 "use client"
 import { AuthContext } from "@/app/contexts/AuthContext";
 import Link from "next/link";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 function Navbar() {
+    const [userInformation, setUserInformation] = useState({})
     const authContext = useContext(AuthContext);
+
+    useEffect(() => {
+        setUserInformation(authContext.getDecodedToken());
+    },[authContext])
 
 	return (
 		<nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -67,7 +72,7 @@ function Navbar() {
 							</ul>
 						</li>
 						<li class="nav-item">
-							{ authContext.isAuthenticated ? <a href="#" className="nav-link">Hoşgeldiniz</a> : <><Link href="/login" class="nav-link">Giriş Yap</Link></> }
+							{ authContext.isAuthenticated ? <a href="#" className="nav-link">Hoşgeldiniz, {userInformation['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']}</a> : <><Link href="/login" class="nav-link">Giriş Yap</Link></> }
 						</li>
 					</ul>
 					<form class="d-flex" role="search">
