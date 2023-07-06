@@ -1,11 +1,13 @@
 "use client"
 import { AuthContext } from "@/app/contexts/AuthContext";
 import Link from "next/link";
+import {  useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 
 function Navbar() {
     const [userInformation, setUserInformation] = useState({})
     const authContext = useContext(AuthContext);
+	const navigate = useRouter();
 
     useEffect(() => {
         setUserInformation(authContext.getDecodedToken());
@@ -74,6 +76,16 @@ function Navbar() {
 						<li class="nav-item">
 							{ authContext.isAuthenticated ? <a href="#" className="nav-link">Hoşgeldiniz, {userInformation['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']}</a> : <><Link href="/login" class="nav-link">Giriş Yap</Link></> }
 						</li>
+						{
+							authContext.isAuthenticated ? <li className="nav-item">
+							<a onClick={() => {
+								localStorage.removeItem('token')
+								authContext.setIsAuthenticated(false);
+								navigate.push('/login')
+							}} className="nav-link cursor-pointer">Çıkış Yap</a>
+						</li> : <></>
+						}
+						
 					</ul>
 					<form class="d-flex" role="search">
 						<input

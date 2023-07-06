@@ -121,3 +121,7 @@ a {
 form>div{
   margin-bottom:12px;
 }
+
+.cursor-pointer{
+  cursor: pointer;
+}

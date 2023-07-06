@@ -1,11 +1,12 @@
 "use client"
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import styles from '../page.module.css'
 import axios from 'axios'
 import {Button} from "primereact/button";
 import {InputText} from "primereact/inputtext"
 import { Toast } from 'primereact/toast';
 import { useRouter } from 'next/navigation';
+import { AuthContext } from '../contexts/AuthContext';
 function Register() {
 
     const [firstName, setFirstName] = useState("")
@@ -15,6 +16,7 @@ function Register() {
     const [passwordConfirm, setPasswordConfirm] = useState("")
     const toast = useRef(null);
     const navigate = useRouter();
+    const authContext = useContext(AuthContext);
 
     const register = () => {
         let object = {firstName,lastName,email,password,passwordConfirm,IPAddress:"123"};
@@ -29,6 +31,9 @@ function Register() {
         axios.post('https://localhost:7206/api/Auth/Register',object)
         .then(response=>{
             toast.current.show({severity:'success', summary:'Başarılı',detail:'Başarıyla kayıt olundu.'});
+            let token = response.data.token;
+            localStorage.setItem('token',token);
+            authContext.setIsAuthenticated(true);
             navigate.push("/");
         })
         .catch(error=>{
