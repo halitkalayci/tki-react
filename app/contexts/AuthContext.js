@@ -7,8 +7,17 @@ export const AuthContext = createContext(); // => DEPO OLUŞTUR
 
 // RFC => React Functional component
 export const AuthProvider = (props) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+    const getInitialAuthState = () => {
+        if(localStorage.getItem('token') != null)
+            return true;
+        
+        return false;
+    }
+    
+    const [isAuthenticated, setIsAuthenticated] = useState(getInitialAuthState());
+
+   
 
     return <AuthContext.Provider value={{isAuthenticated,setIsAuthenticated}}>
         {props.children}
