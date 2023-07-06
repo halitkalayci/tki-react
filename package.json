@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^1.4.0",
+    "bootstrap": "^5.3.0",
     "formik": "^2.4.2",
     "next": "13.4.8",
     "primeicons": "^6.0.1",

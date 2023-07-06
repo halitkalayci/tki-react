@@ -19,7 +19,6 @@ export default function Home() {
   let name = "Halit"; // API isteği?
   // Token'i decode edip?
 
-  let cars = ["BMW", "TOGG", "Mercedes", "Fiat"]
 
 
   const clickFunction = () => {
@@ -41,14 +40,21 @@ export default function Home() {
 
   useEffect(() => {
     console.log(count);
-    axiosInstance.get("Cars?PageIndex=0&PageSize=20")
-    .then(response=>console.log("response"))
   }, [count]); 
   // custom watcher
 
   useEffect(() => {
-    
+    fetchCarsFromAPI();
   },[]);
+
+  const [cars, setCars] = useState([])
+
+  const fetchCarsFromAPI = () => {
+    axiosInstance.get('Cars?PageIndex=0&PageSize=20')
+    .then(response=> {
+      setCars(response.data.items);
+    })
+  }
   // n adet useEffect n adet useState
   // watcher
 
@@ -66,36 +72,11 @@ export default function Home() {
   
   return (
     <main className={styles.main}>
-      <p> Sayı: {count}  </p>
-      <Button label="Arttır" icon="pi pi-check" />
-      <button onClick={() => {
-        setCount(count + 1);
-      }}> Arttır </button>
-      <br />
-      <button onClick={() => {
-        setCount(count - 1)
-      }}> Azalt </button>
-      <br />
-      <button onClick={() => console.log(count)}>Konsola Yazdır</button>
-
-      <p>************</p>
-
-      <p> Sayı: {number}  </p>
-      <button onClick={() => {
-        number++
-      }}> Arttır </button>
-      <br />
-      <button onClick={() => {
-        number--
-      }}> Azalt </button>
-      <br />
-      <button onClick={() => console.log(number)}>Konsola Yazdır</button>
-
-
-
-      <CarList brand="BMW" model="520" year="2023" /> 
-      <CarList brand="Mercedes" model="e60" year="2012"/> 
-
+      <div className='row'>
+       {cars.map(car => <div key={car.id} className='col-3 mb-3'> 
+        <CarList car={car}></CarList>
+       </div>)}
+      </div>
     </main>
   )
 }
