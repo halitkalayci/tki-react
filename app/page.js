@@ -6,6 +6,7 @@ import CarList from './components/car-list/CarList';
 
 import { Button } from 'primereact/button';
 import axios from 'axios';
+import axiosInstance from './utilities/axiosInterceptors';
 // SSR - CSR 
 // Component
 // Functional Component - Class Based Component
@@ -40,10 +41,8 @@ export default function Home() {
 
   useEffect(() => {
     console.log(count);
-    axios.get("https://localhost:7206/api/Cars?PageIndex=0&PageSize=20", 
-    {headers: {Authorization: 'Bearer ' + localStorage.getItem('token')} })
-    .then(response=>console.log(response))
-    .catch(error=>console.log(error))
+    axiosInstance.get("Cars?PageIndex=0&PageSize=20")
+    .then(response=>console.log("response"))
   }, [count]); 
   // custom watcher
 

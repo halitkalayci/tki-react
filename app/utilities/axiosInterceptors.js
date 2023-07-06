@@ -8,6 +8,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use((config)=>{
     console.log("İstek gönderiliyor.");
+    config.headers.Authorization = "Bearer " + localStorage.getItem("token")
     return config;
 });
 
@@ -18,3 +19,6 @@ axiosInstance.interceptors.response.use((response)=>{
     console.log(error);
     return Promise.reject(error);
 });
+
+
+export default axiosInstance;
