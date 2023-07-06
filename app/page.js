@@ -47,13 +47,23 @@ export default function Home() {
     fetchCarsFromAPI();
   },[]);
 
-  const [cars, setCars] = useState([])
+  const [cars, setCars] = useState({})
+  const [pagination, setPagination] = useState({pageIndex:0, pageSize:2})
 
   const fetchCarsFromAPI = () => {
-    axiosInstance.get('Cars?PageIndex=0&PageSize=20')
+    axiosInstance.get('Cars?PageIndex=' + pagination.pageIndex + '&PageSize=' + pagination.pageSize)
     .then(response=> {
-      setCars(response.data.items);
+      setCars(response.data);
     })
+  }
+
+  useEffect(() => {
+    fetchCarsFromAPI();
+  },[pagination])
+
+  const onPageChange = (e) => {
+    setPagination({...pagination, pageIndex:e.page}) // async
+    //fetchCarsFromAPI(); // async işlem bitmiş gibi
   }
   // n adet useEffect n adet useState
   // watcher
@@ -73,14 +83,14 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div className='row'>
-       {cars.map(car => <div key={car.id} className='col-3 mb-3'> 
+       {cars?.items?.map(car => <div key={car.id} className='col-3 mb-3'> 
         <CarList car={car}></CarList>
        </div>)}
 
        <div className='col-12'>
-       <Paginator rows={5} totalRecords={cars.length} rowsPerPageOptions={[10, 20, 30]} onPageChange={(e) => console.log(e)}  />
+       <Paginator  rows={2} totalRecords={cars.count} onPageChange={onPageChange}  />
        </div>
-      </div>
+      </div> 
     </main>
   )
 }
