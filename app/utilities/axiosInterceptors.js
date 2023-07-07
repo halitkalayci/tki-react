@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 const axiosInstance = axios.create({
     baseURL:'https://localhost:7206/api/',
     withCredentials: true
@@ -30,7 +29,8 @@ axiosInstance.interceptors.response.use((response)=>{
     // Saf javascript => Context
     switch (type) {
         case "https://example.com/probs/business":
-            alert(error.response.data.detail);
+            window.dispatchEvent(new Event("toastr"));
+            //authContext.showToastr({severity:'error',summary:'HATA',detail:error.response.data.detail});
             break;
         case "https://example.com/probs/validation":
             alert("Validasyon hatası");
@@ -46,3 +46,6 @@ axiosInstance.interceptors.response.use((response)=>{
 
 
 export default axiosInstance;
+
+
+// tki-react.vercel.app/location

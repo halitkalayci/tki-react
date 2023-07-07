@@ -24,13 +24,13 @@ function Register() {
         
         if(object.password != passwordConfirm)
         {
-            toast.current.show({severity:'error', summary:'Başarısız',detail:'Şifreler uyuşmuyor'});
+            authContext.showToastr({severity:'error', summary:'Başarısız',detail:'Şifreler uyuşmuyor'});
             return;
         }
 
         axios.post('https://localhost:7206/api/Auth/Register',object)
         .then(response=>{
-            toast.current.show({severity:'success', summary:'Başarılı',detail:'Başarıyla kayıt olundu.'});
+            authContext.showToastr({severity:'success', summary:'Başarılı',detail:'Başarıyla kayıt olundu.'});
             let token = response.data.token;
             localStorage.setItem('token',token);
             authContext.setIsAuthenticated(true);
@@ -38,14 +38,13 @@ function Register() {
         })
         .catch(error=>{
             console.log(error);
-            toast.current.show({severity:'error', summary:'Başarısız',detail:error.response.data.detail});
+            authContext.showToastr({severity:'error', summary:'Başarısız',detail:error.response.data.detail});
         });
         
     }
 
     return (
         <main className={styles.main}>
-            <Toast ref={toast}></Toast>
             <h3>Register Page</h3>
             <form>
                 <div className='form-group'>

@@ -6,6 +6,7 @@ import "primereact/resources/primereact.min.css";
 import "bootstrap/dist/css/bootstrap.min.css"
 import { AuthContext, AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/navbar/Navbar';
+import Subscriber from './components/subscriber/Subscriber';
 
 // Global importlar burada.
 
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
+          <Subscriber />
           <Navbar></Navbar>
           {children}
         </AuthProvider>

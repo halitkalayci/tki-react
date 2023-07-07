@@ -54,13 +54,14 @@ function Login() {
                 toastReference.current.show({ severity: 'success', summary: 'Başarılı', detail: 'Başarıyla Giriş Yapıldı' });
                 navigate.push("/")
                 authContext.setIsAuthenticated(true);
+            }).catch(error => {
+                authContext.showToastr({ severity: 'error', summary: 'Hatalı', detail: 'Giriş Yapılamadı' });
             });
     }
     // one way data binding 
     // two way data binding
     return (
         <main className={styles.main}>
-            <Toast ref={toastReference} />
             <h3>Login Page</h3>
             <form>
                 <div className='form-group'>
