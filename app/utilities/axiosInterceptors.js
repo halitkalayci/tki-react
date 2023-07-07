@@ -29,13 +29,13 @@ axiosInstance.interceptors.response.use((response) => {
     // Saf javascript => Context
     switch (type) {
         case "https://example.com/probs/business":
-            //window.dispatchEvent(new Event("toastr"));
             window.dispatchEvent(new CustomEvent("toastr", { detail: { severity: 'error', summary: 'HATA', detail: error.response.data.detail } }));
-            //authContext.showToastr({severity:'error',summary:'HATA',detail:error.response.data.detail});
             break;
         case "https://example.com/probs/validation":
+            // Tüm errorları foreach ile gezip ekrana yazdırmak.
             alert("Validasyon hatası");
             break;
+        // authorization hatası için "Yetkiniz yok" 
         default:
             alert("Bilinmedik Hata")
             break;
