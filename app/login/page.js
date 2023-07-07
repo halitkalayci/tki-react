@@ -34,7 +34,7 @@ function Login() {
         console.log(authContext);
     },[])
 
-    const [email, setEmail] = useState("")
+    const [eposta, setEmail] = useState("")
     const [password, setPassword] = useState("")
     // useReference => react'daki elementlerin referans olarak bir değişkene atanması işlevi
     // başlangıç genelde null olur => site yüklenene kadar reference boş
