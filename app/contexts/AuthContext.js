@@ -28,3 +28,6 @@ export const AuthProvider = (props) => {
         {props.children}
     </AuthContext.Provider>
 }
+// Geolocation
+// Global Error Handler
+// navigator.geolocation.getCurrentPosition((position) => { console.log(position) })
