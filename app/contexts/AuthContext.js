@@ -10,7 +10,7 @@ export const AuthContext = createContext(); // => DEPO OLUŞTUR
 export const AuthProvider = (props) => {
 
     const getInitialAuthState = () => {
-        if(localStorage.getItem('token') != null)
+        if(typeof window !== 'undefined' && localStorage.getItem('token') != null)
             return true;
         
         return false;

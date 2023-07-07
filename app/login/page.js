@@ -9,6 +9,7 @@ import { Toast } from 'primereact/toast';
 import { useRouter } from 'next/navigation';
 import { AuthContext } from '../contexts/AuthContext';
 import jwt_decode from "jwt-decode";
+import axiosInstance from '../utilities/axiosInterceptors';
 // Folder Structure Routing
 function Login() {
     // HTTP Isteği
@@ -45,7 +46,7 @@ function Login() {
         let object = { email, password };
         console.log(object);
 
-        axios.post("https://localhost:7206/api/Auth", object)
+        axiosInstance.post("https://localhost:7206/api/Auth", object)
             .then(response => {
                 // gelen cevaptan tokeni okuma
                 let token = response.data.accessToken.token;
@@ -53,8 +54,6 @@ function Login() {
                 toastReference.current.show({ severity: 'success', summary: 'Başarılı', detail: 'Başarıyla Giriş Yapıldı' });
                 navigate.push("/")
                 authContext.setIsAuthenticated(true);
-            }).catch(error => {
-                toastReference.current.show({ severity: 'error', summary: 'Hatalı', detail: 'Giriş Yapılamadı' });
             });
     }
     // one way data binding 
