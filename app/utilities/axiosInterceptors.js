@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ErrorTypes } from "../constants/errorTypes";
 
 const axiosInstance = axios.create({
     baseURL: 'https://localhost:7206/api/',
@@ -28,10 +29,11 @@ axiosInstance.interceptors.response.use((response) => {
     // Context => React Hook
     // Saf javascript => Context
     switch (type) {
-        case "https://example.com/probs/business":
+        // never use magic string
+        case ErrorTypes.BUSINESS_ERROR:
             window.dispatchEvent(new CustomEvent("toastr", { detail: { severity: 'error', summary: 'HATA', detail: error.response.data.detail } }));
             break;
-        case "https://example.com/probs/validation":
+        case ErrorTypes.VALIDATION_ERROR:
             // Tüm errorları foreach ile gezip ekrana yazdırmak.
             // Gelen veriyi iyi analiz edip ön tarafta UX açısından en verimli nasıl kullanabiliriz.
             let message = "";
@@ -42,7 +44,7 @@ axiosInstance.interceptors.response.use((response) => {
             })
             window.dispatchEvent(new CustomEvent("toastr", { detail: { severity: 'error', summary: 'HATA', detail: message } }));
             break;
-        case "https://example.com/probs/authorization":
+        case ErrorTypes.AUTHORIZATION_ERROR:
             // Kullanıcının tokeni var ama süresi geçmiş.
             // Refresh-Token 
             // localStorage.token varsa Refresh

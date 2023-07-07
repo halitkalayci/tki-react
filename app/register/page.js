@@ -37,7 +37,6 @@ function Register() {
             authContext.setIsAuthenticated(true);
             navigate.push("/");
         })
-        
     }
 
     return (
