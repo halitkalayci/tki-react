@@ -33,9 +33,24 @@ axiosInstance.interceptors.response.use((response) => {
             break;
         case "https://example.com/probs/validation":
             // Tüm errorları foreach ile gezip ekrana yazdırmak.
-            alert("Validasyon hatası");
+            // Gelen veriyi iyi analiz edip ön tarafta UX açısından en verimli nasıl kullanabiliriz.
+            let message = "";
+            error.response.data.Errors.forEach(totalError => {
+                totalError.Errors.forEach(err => {
+                    message += err + "\n"
+                })
+            })
+            window.dispatchEvent(new CustomEvent("toastr", { detail: { severity: 'error', summary: 'HATA', detail: message } }));
             break;
-        // authorization hatası için "Yetkiniz yok" 
+        case "https://example.com/probs/authorization":
+            // Kullanıcının tokeni var ama süresi geçmiş.
+            // Refresh-Token 
+            // localStorage.token varsa Refresh
+            // yetkiniz yok
+            // windowEvent => react'e erişim yok ama ihtiyaç var
+            window.dispatchEvent(new CustomEvent("toastr", { detail: { severity: 'error', summary: 'HATA', detail: "Yetkiniz bulunmamaktadır." } }));
+            window.dispatchEvent(new Event("redirectToLogin"))
+            break;
         default:
             alert("Bilinmedik Hata")
             break;

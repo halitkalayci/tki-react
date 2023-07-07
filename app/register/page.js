@@ -7,6 +7,7 @@ import {InputText} from "primereact/inputtext"
 import { Toast } from 'primereact/toast';
 import { useRouter } from 'next/navigation';
 import { AuthContext } from '../contexts/AuthContext';
+import axiosInstance from '../utilities/axiosInterceptors';
 function Register() {
 
     const [firstName, setFirstName] = useState("")
@@ -28,7 +29,7 @@ function Register() {
             return;
         }
 
-        axios.post('https://localhost:7206/api/Auth/Register',object)
+        axiosInstance.post('https://localhost:7206/api/Auth/Register',object)
         .then(response=>{
             authContext.showToastr({severity:'success', summary:'Başarılı',detail:'Başarıyla kayıt olundu.'});
             let token = response.data.token;
@@ -36,10 +37,6 @@ function Register() {
             authContext.setIsAuthenticated(true);
             navigate.push("/");
         })
-        .catch(error=>{
-            console.log(error);
-            authContext.showToastr({severity:'error', summary:'Başarısız',detail:error.response.data.detail});
-        });
         
     }
 

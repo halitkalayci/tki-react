@@ -22,7 +22,7 @@ export const AuthProvider = (props) => {
         toast.current.clear();
         toast.current.show(opt);
     }
-
+    // add one more function - showToastrHtml
     const [isAuthenticated, setIsAuthenticated] = useState(getInitialAuthState());
 
     const getDecodedToken = () => {
