@@ -9,8 +9,8 @@ export default function Subscriber() {
   
   // Dinleyicilerin oluşturulması..
   useEffect(() => {
-    window.addEventListener('toastr',() => {
-        console.log("dışarıdan toastr eventi çağırıldı.");
+    window.addEventListener('toastr',(e) => {
+        authContext.showToastr(e.detail);
     })
   },[])
 

@@ -19,6 +19,7 @@ export const AuthProvider = (props) => {
     }
 
     const showToastr = (opt) => {
+        toast.current.clear();
         toast.current.show(opt);
     }
 

@@ -1,17 +1,17 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-    baseURL:'https://localhost:7206/api/',
+    baseURL: 'https://localhost:7206/api/',
     withCredentials: true
 });
 
-axiosInstance.interceptors.request.use((config)=>{
+axiosInstance.interceptors.request.use((config) => {
     console.log("İstek gönderiliyor.");
     config.headers.Authorization = "Bearer " + localStorage.getItem("token")
     return config;
 });
 
-axiosInstance.interceptors.response.use((response)=>{
+axiosInstance.interceptors.response.use((response) => {
     console.log("Cevap alındı.");
     return response;
 }, async (error) => {
@@ -29,7 +29,8 @@ axiosInstance.interceptors.response.use((response)=>{
     // Saf javascript => Context
     switch (type) {
         case "https://example.com/probs/business":
-            window.dispatchEvent(new Event("toastr"));
+            //window.dispatchEvent(new Event("toastr"));
+            window.dispatchEvent(new CustomEvent("toastr", { detail: { severity: 'error', summary: 'HATA', detail: error.response.data.detail } }));
             //authContext.showToastr({severity:'error',summary:'HATA',detail:error.response.data.detail});
             break;
         case "https://example.com/probs/validation":

@@ -54,8 +54,6 @@ function Login() {
                 toastReference.current.show({ severity: 'success', summary: 'Başarılı', detail: 'Başarıyla Giriş Yapıldı' });
                 navigate.push("/")
                 authContext.setIsAuthenticated(true);
-            }).catch(error => {
-                authContext.showToastr({ severity: 'error', summary: 'Hatalı', detail: 'Giriş Yapılamadı' });
             });
     }
     // one way data binding 
