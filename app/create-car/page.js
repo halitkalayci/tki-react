@@ -4,6 +4,7 @@ import styles from "../page.module.css"
 import * as Yup from "yup";
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
+import axiosInstance from '../utilities/axiosInterceptors';
 function CreateCar() {
 
 
@@ -23,7 +24,12 @@ function CreateCar() {
             <Formik
                 initialValues={addCarInitialValues}
                 validationSchema={addCarValidationSchema}
-                onSubmit={(values) => console.log(values)}
+                onSubmit={(values) => {
+                    axiosInstance.post('Cars',values)
+                    .then(response=>{
+                        // kullanıcıyı uyarmak.
+                    })
+                }}
             >
 
                 <Form>
