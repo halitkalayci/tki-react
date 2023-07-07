@@ -1,4 +1,5 @@
 "use client"
+import { ClaimNames } from "@/app/constants/claimNames";
 import { AuthContext } from "@/app/contexts/AuthContext";
 import Link from "next/link";
 import {  useRouter } from "next/navigation";
@@ -74,7 +75,7 @@ function Navbar() {
 							</ul>
 						</li>
 						<li class="nav-item">
-							{ authContext.isAuthenticated ? <a href="#" className="nav-link">Hoşgeldiniz, {userInformation['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']}</a> : <><Link href="/login" class="nav-link">Giriş Yap</Link></> }
+							{ authContext.isAuthenticated ? <a href="#" className="nav-link">Hoşgeldiniz, {userInformation[ClaimNames.NAME]}</a> : <><Link href="/login" class="nav-link">Giriş Yap</Link></> }
 						</li>
 						{
 							authContext.isAuthenticated ? <li className="nav-item">
