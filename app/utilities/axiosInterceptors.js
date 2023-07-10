@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ErrorTypes } from "../constants/errorTypes";
-
+import jwt_decode from "jwt-decode";
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:5210/api/',
     withCredentials: true
@@ -54,13 +54,32 @@ axiosInstance.interceptors.response.use((response) => {
             // window.dispatchEvent(new CustomEvent("toastr", { detail: { severity: 'error', summary: 'HATA', detail: "Yetkiniz bulunmamaktadır." } }));
             // window.dispatchEvent(new Event("redirectToLogin"))
             // sonsuz döngü? => Kullanıcı gerçekten refresh etmeli.
-            const originalRequest = error.config;
-            originalRequest._retry = true; // axios'a isteği tekrar denemesi
-            let response = await axiosInstance.post("Auth/refresh-token");
-            let token = response.data.token;
-            localStorage.setItem("token",token); // localStorage
-            originalRequest.headers.Authorization = "Bearer " + token;
-            return axiosInstance(originalRequest);
+
+
+            // tokenin süresi geçmiş mi? => geçmemişse "Yetki yetersiz." ❌❌
+            // token olmadığı => hiç login olmamış olması ❌❌
+            // token var, süresi geçmiş, yenilediğim halde 401 => ❌❌
+            // token var, süresi geçmiş, yapılmak istenen işleme yetki var => ✔️
+            debugger;
+            let token = localStorage.getItem("token");
+            if(!token)
+            {
+               window.dispatchEvent(new Event("redirectToLogin"));
+               break;
+            }
+            let decodedToken = jwt_decode(token);
+            if ( Date.now() >= decodedToken["exp"] * 1000 ){
+                const originalRequest = error.config;
+                originalRequest._retry = true; // axios'a isteği tekrar denemesi
+                let response = await axiosInstance.post("Auth/refresh-token");
+                let token = response.data.token;
+                localStorage.setItem("token",token); // localStorage
+                originalRequest.headers.Authorization = "Bearer " + token;
+                return axiosInstance(originalRequest);
+            }
+            window.dispatchEvent(new CustomEvent("toastr", { detail: { severity: 'error', summary: 'HATA', detail: "Yetkiniz bulunmamaktadır." } }));
+            //window.dispatchEvent(new Event("redirectToLogin"))
+            break;
         default:
             alert("Bilinmedik Hata")
             break;

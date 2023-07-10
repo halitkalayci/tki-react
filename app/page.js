@@ -8,7 +8,7 @@ import axiosInstance from './utilities/axiosInterceptors';
 import { AuthContext } from './contexts/AuthContext';
 import { Dialog } from 'primereact/dialog';
 import QRCode from 'react-qr-code';
-
+import jwt_decode from "jwt-decode"
 // SSR - CSR 
 // Component
 // Functional Component - Class Based Component
@@ -49,6 +49,14 @@ export default function Home() {
   useEffect(() => {
     console.log(authContext.getDecodedToken());
     fetchCarsFromAPI();
+
+    let token = localStorage.getItem("token");
+    let decodedToken = jwt_decode(token);
+    console.log(decodedToken);
+
+    if ( Date.now() >= decodedToken["exp"] * 1000){
+      console.log("token süresi geçmiş")
+    }
   }, []);
 
   const [cars, setCars] = useState({})

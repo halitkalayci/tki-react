@@ -28,7 +28,13 @@ export const AuthProvider = (props) => {
     const getDecodedToken = () => {
         if (getInitialAuthState() == false)
                 return {};
-        return jwt_decode(localStorage.getItem('token'));
+        let obj = {};
+        try {
+            obj = jwt_decode(localStorage.getItem("token"))
+        } catch (error) {
+            obj = {};
+        }
+        return obj;
     }
 
     return <AuthContext.Provider value={{isAuthenticated,setIsAuthenticated,getDecodedToken,showToastr}}>
