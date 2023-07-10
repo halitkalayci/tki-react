@@ -19,6 +19,8 @@ function CreateCar() {
         .matches(/(0[1-9]|[1-7][0-9]|8[01])(([A-Z])(\d{4,5})|([A-Z]{2})(\d{3,4})|([A-Z]{3})(\d{2}))/, 'Lütfen düzgün bir Türkiye plakası giriniz.'),
     })
 
+    // resim upload
+    // marka seçme
     return (
         <main className={styles.main}>
             <Formik

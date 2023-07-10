@@ -14,6 +14,7 @@ axiosInstance.interceptors.request.use((config) => {
 
 axiosInstance.interceptors.response.use((response) => {
     console.log("Cevap alındı.");
+    // 
     return response;
 }, async (error) => {
     // Hata bir business error mu? => toastr error.detail
