@@ -2,7 +2,7 @@ import axios from "axios";
 import { ErrorTypes } from "../constants/errorTypes";
 
 const axiosInstance = axios.create({
-    baseURL: 'https://localhost:7206/api/',
+    baseURL: 'http://localhost:5210/api/',
     withCredentials: true
 });
 
@@ -51,9 +51,16 @@ axiosInstance.interceptors.response.use((response) => {
             // localStorage.token varsa Refresh
             // yetkiniz yok
             // windowEvent => react'e erişim yok ama ihtiyaç var
-            window.dispatchEvent(new CustomEvent("toastr", { detail: { severity: 'error', summary: 'HATA', detail: "Yetkiniz bulunmamaktadır." } }));
-            window.dispatchEvent(new Event("redirectToLogin"))
-            break;
+            // window.dispatchEvent(new CustomEvent("toastr", { detail: { severity: 'error', summary: 'HATA', detail: "Yetkiniz bulunmamaktadır." } }));
+            // window.dispatchEvent(new Event("redirectToLogin"))
+            // sonsuz döngü? => Kullanıcı gerçekten refresh etmeli.
+            const originalRequest = error.config;
+            originalRequest._retry = true; // axios'a isteği tekrar denemesi
+            let response = await axiosInstance.post("Auth/refresh-token");
+            let token = response.data.token;
+            localStorage.setItem("token",token); // localStorage
+            originalRequest.headers.Authorization = "Bearer " + token;
+            return axiosInstance(originalRequest);
         default:
             alert("Bilinmedik Hata")
             break;

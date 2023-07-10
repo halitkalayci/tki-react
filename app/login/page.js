@@ -53,7 +53,7 @@ function Login() {
 
         console.log(object);
 
-        axiosInstance.post("https://localhost:7206/api/Auth", object)
+        axiosInstance.post("Auth", object)
             .then(response => {
                 // gelen cevaptan tokeni okuma
                 if (response.data.requiredAuthenticatorType
