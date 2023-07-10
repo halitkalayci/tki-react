@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { AuthContext } from '../contexts/AuthContext';
 import jwt_decode from "jwt-decode";
 import axiosInstance from '../utilities/axiosInterceptors';
+import { Dialog } from 'primereact/dialog';
 // Folder Structure Routing
 function Login() {
     // HTTP Isteği
@@ -32,29 +33,41 @@ function Login() {
 
     useEffect(() => {
         console.log(authContext);
-    },[])
+    }, [])
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [otp, setOtp] = useState("")
+    const [emailOtp, setEmailOtp] = useState("");
     // useReference => react'daki elementlerin referans olarak bir değişkene atanması işlevi
     // başlangıç genelde null olur => site yüklenene kadar reference boş
     const toastReference = useRef(null);
     const navigate = useRouter();
-
-    const submit = () => {
+    const [showEmailPopup, setShowEmailPopup] = useState(false)
+    const submit = (withEmail=false) => {
         //console.log( { email: email, password: password } );
-        let object = { email, password };
+
+        let object = { email, password, authenticatorCode: otp };
+        if (withEmail)
+            object.authenticatorCode = emailOtp;
+
         console.log(object);
 
         axiosInstance.post("https://localhost:7206/api/Auth", object)
             .then(response => {
                 // gelen cevaptan tokeni okuma
+                if (response.data.requiredAuthenticatorType
+                    == 1 && response.data.accessToken == null) {
+                    // Dialog açıp
+                    setShowEmailPopup(true);
+                }
                 let token = response.data.accessToken.token;
                 localStorage.setItem('token', token);
                 navigate.push("/")
                 authContext.setIsAuthenticated(true);
             });
     }
+
     // one way data binding 
     // two way data binding
     return (
@@ -67,12 +80,28 @@ function Login() {
                 </div>
                 <div className='form-group'>
                     <label>Şifre</label>
-                    <InputText onKeyDown={(e) => { if (e.key == 'Enter') submit()}} onChange={(e) => setPassword(e.target.value)} value={password} type="password" placeholder='******' />
+                    <InputText onKeyDown={(e) => { if (e.key == 'Enter') submit() }} onChange={(e) => setPassword(e.target.value)} value={password} type="password" placeholder='******' />
+                </div>
+                <div className='form-group'>
+                    <label>OTP</label>
+                    <InputText onChange={(e) => setOtp(e.target.value)} value={otp} type="text" placeholder='' />
                 </div>
                 <div>
                     <Button className='w-100' severity='success' label="Giriş Yap" type='button' onClick={submit}></Button>
                 </div>
             </form>
+
+            <Dialog header="Email Onay" visible={showEmailPopup}>
+                <form>
+                    <div className='form-group'>
+                        <label>Onay Kodu</label>
+                        <input value={emailOtp} onChange={(e) => setEmailOtp(e.target.value)} className='form-control' type="text" placeholder='' />
+                    </div>
+                    <div>
+                        <Button type='button' onClick={() => { submit(true) }} label='Onayla' severity='info'></Button>
+                    </div>
+                </form>
+            </Dialog>
         </main>
     )
 }

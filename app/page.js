@@ -101,11 +101,18 @@ export default function Home() {
         console.log(response);
       })
   }
+
+  const enableEmailOtp = () => {
+      axiosInstance.post("Auth/enable-email-otp").then(response => {
+         authContext.showToastr({severity:"success", summary:'Başarılı' ,detail:"Email gönderildi."})
+      })
+  }
   return (
     <main className={styles.main}>
       <div className='row'>
         <div className='col-12 mb-3'>
           <Button onClick={enableOtp} label='OTP Aktif Et' severity='info'> </Button>
+          <Button className='mx-2' onClick={enableEmailOtp} label='Email OTP Aktif Et' severity='info'> </Button>
         </div>
 
         {cars?.items?.map(car => <div key={car.id} className='col-3 mb-3'>
