@@ -74,7 +74,7 @@ function Navbar() {
 								</li>
 							</ul>
 						</li>
-						<li class="nav-item">
+						<li suppressHydrationWarning  class="nav-item">
 							{ authContext.isAuthenticated ? <a href="#" className="nav-link">Hoşgeldiniz, {userInformation[ClaimNames.NAME]}</a> : <><Link href="/login" class="nav-link">Giriş Yap</Link></> }
 						</li>
 						{

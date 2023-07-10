@@ -48,7 +48,7 @@ function Login() {
         //console.log( { email: email, password: password } );
 
         let object = { email, password, authenticatorCode: otp };
-        if (withEmail)
+        if (withEmail==true)
             object.authenticatorCode = emailOtp;
 
         console.log(object);
