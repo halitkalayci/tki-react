@@ -6,8 +6,12 @@ const axiosInstance = axios.create({
     withCredentials: true
 });
 
+// Her request öncesi token süresini kontrol edip, süresi geçen
+// token varsa yenileyip requesti öyle göndermek.
+
 axiosInstance.interceptors.request.use((config) => {
     console.log("İstek gönderiliyor.");
+    // token varmı, süresi geçmiş mi? => yenile ve sonra isteği gönder.
     config.headers.Authorization = "Bearer " + localStorage.getItem("token")
     return config;
 });

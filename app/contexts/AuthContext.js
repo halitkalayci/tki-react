@@ -2,6 +2,7 @@
 import { createContext, useRef, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { Toast } from "primereact/toast";
+import { ClaimNames } from "../constants/claimNames";
 
 export const AuthContext = createContext(); // => DEPO OLUŞTUR
 
@@ -37,7 +38,21 @@ export const AuthProvider = (props) => {
         return obj;
     }
 
-    return <AuthContext.Provider value={{isAuthenticated,setIsAuthenticated,getDecodedToken,showToastr}}>
+    const isAuthorized = (roles) => {
+        debugger;
+        let hasRole=false;
+        let token = getDecodedToken();
+        let userRoles = token[ClaimNames.ROLES];
+        if(userRoles){
+            roles.forEach(role => {
+                if(userRoles.includes(role))
+                    hasRole=true;
+            })
+        }
+        return hasRole;
+    }
+
+    return <AuthContext.Provider value={{isAuthorized,isAuthenticated,setIsAuthenticated,getDecodedToken,showToastr}}>
         <Toast ref={toast}/>
         {props.children}
     </AuthContext.Provider>

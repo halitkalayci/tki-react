@@ -1,18 +1,18 @@
-"use client"
-import { ClaimNames } from "@/app/constants/claimNames";
-import { AuthContext } from "@/app/contexts/AuthContext";
+"use client";
+import {ClaimNames} from "@/app/constants/claimNames";
+import {AuthContext} from "@/app/contexts/AuthContext";
 import Link from "next/link";
-import {  useRouter } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
+import {useRouter} from "next/navigation";
+import React, {useContext, useEffect, useState} from "react";
 
 function Navbar() {
-    const [userInformation, setUserInformation] = useState({})
-    const authContext = useContext(AuthContext);
+	const [userInformation, setUserInformation] = useState({});
+	const authContext = useContext(AuthContext);
 	const navigate = useRouter();
 
-    useEffect(() => {
-        setUserInformation(authContext.getDecodedToken());
-    },[authContext])
+	useEffect(() => {
+		setUserInformation(authContext.getDecodedToken());
+	}, [authContext]);
 
 	return (
 		<nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -38,11 +38,13 @@ function Navbar() {
 								Home
 							</a>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#">
-								Link
-							</a>
-						</li>
+						{authContext.isAuthorized(["Moderator"]) && (
+							<li class="nav-item">
+								<a class="nav-link" href="#">
+									Araba Ekle
+								</a>
+							</li>
+						)}
 						<li class="nav-item dropdown">
 							<a
 								class="nav-link dropdown-toggle"
@@ -74,19 +76,35 @@ function Navbar() {
 								</li>
 							</ul>
 						</li>
-						<li suppressHydrationWarning  class="nav-item">
-							{ authContext.isAuthenticated ? <a href="#" className="nav-link">Hoşgeldiniz, {userInformation[ClaimNames.NAME]}</a> : <><Link href="/login" class="nav-link">Giriş Yap</Link></> }
+						<li suppressHydrationWarning class="nav-item">
+							{authContext.isAuthenticated ? (
+								<a href="#" className="nav-link">
+									Hoşgeldiniz, {userInformation[ClaimNames.NAME]}
+								</a>
+							) : (
+								<>
+									<Link href="/login" class="nav-link">
+										Giriş Yap
+									</Link>
+								</>
+							)}
 						</li>
-						{
-							authContext.isAuthenticated ? <li className="nav-item">
-							<a onClick={() => {
-								localStorage.removeItem('token')
-								authContext.setIsAuthenticated(false);
-								navigate.push('/login')
-							}} className="nav-link cursor-pointer">Çıkış Yap</a>
-						</li> : <></>
-						}
-						
+						{authContext.isAuthenticated ? (
+							<li className="nav-item">
+								<a
+									onClick={() => {
+										localStorage.removeItem("token");
+										authContext.setIsAuthenticated(false);
+										navigate.push("/login");
+									}}
+									className="nav-link cursor-pointer"
+								>
+									Çıkış Yap
+								</a>
+							</li>
+						) : (
+							<></>
+						)}
 					</ul>
 					<form class="d-flex" role="search">
 						<input
