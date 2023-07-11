@@ -128,3 +128,6 @@ form>div{
 .mw-100{
   max-width: 100%;
 }
+.text-right{
+  text-align: right;
+}

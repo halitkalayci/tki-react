@@ -1,0 +1,10 @@
+.message-box{
+    background: gray;
+    width: 50%;
+    text-align: center;
+    border-radius: 101px;
+    color: white;
+}
+.message-right{
+    float: right;
+}

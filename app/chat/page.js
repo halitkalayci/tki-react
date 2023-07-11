@@ -1,9 +1,13 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import * as signalR from "@microsoft/signalr";
+import styles from "../page.module.css"
+import { Button } from 'primereact/button';
+import './chat.css'
 function Chat() {
-    const [connection, setConnection] = useState(null);
+  const [connection, setConnection] = useState(null);
   const [message, setMessage] = useState("")
+  const [messages, setMessages] = useState([])
   useEffect(() => {
     createConnection();
   },[]);
@@ -17,8 +21,8 @@ function Chat() {
   }
   useEffect(() => {
     if(!connection) return;
-    connection.on('MessageReceived', (message) => {
-        console.log("BACKENDDEN MESAJ ALINDI:",message);
+    connection.on('MessageReceived', (messages) => {
+        setMessages(messages);
     })
     connection.start().then(() => {
         console.log(connection.connectionId);
@@ -26,12 +30,21 @@ function Chat() {
   }, [connection])
 
   return (
-    <div>Chat
-        <input value={message} onChange={(e) => {setMessage(e.target.value)}}/>
-        <button onClick={() => {
-            connection.invoke("SendMessageAsync",message);
-        }}>Mesaj Gönder</button>
-    </div>
+    <main className={styles.main}>
+        Chat
+
+<div className='w-50'>
+    {messages.map(message => 
+    <p className={'message-box ' + message.connectionId == connection.connectionId ? 'message-right' : ''}>{message.detail}</p>
+    )}
+</div>
+<div className='w-50'>
+        <input className='form-control' value={message} onChange={(e) => {setMessage(e.target.value)}}/>
+        <Button label="Gönder" className='w-100 mt-2' onClick={() => {
+            connection.invoke("SendMessageAsync",message,connection.connectionId);
+        }}></Button>
+        </div>
+    </main>
   )
 }
 
