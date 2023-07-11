@@ -35,7 +35,7 @@ function Chat() {
 
 <div className='w-50'>
     {messages.map(message => 
-    <p className={'message-box ' + message.connectionId == connection.connectionId ? 'message-right' : ''}>{message.detail}</p>
+    <p className={'message-box ' + (message.connectionId == connection.connectionId ? 'message-right' : '')}>{message.detail}</p>
     )}
 </div>
 <div className='w-50'>
