@@ -60,7 +60,7 @@ export default function Home() {
   }, []);
 
   const [cars, setCars] = useState({})
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 2 })
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 })
   const fetchCarsFromAPI = () => {
     axiosInstance.get('Cars?PageIndex=' + pagination.pageIndex + '&PageSize=' + pagination.pageSize)
       .then(response => {
@@ -128,7 +128,7 @@ export default function Home() {
         </div>)}
 
         <div className='col-12'>
-          <Paginator rows={2} totalRecords={cars.count} onPageChange={onPageChange} />
+          <Paginator rows={5} totalRecords={cars.count} onPageChange={onPageChange} />
         </div>
 
 

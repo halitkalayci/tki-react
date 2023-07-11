@@ -39,7 +39,6 @@ export const AuthProvider = (props) => {
     }
 
     const isAuthorized = (roles) => {
-        debugger;
         let hasRole=false;
         let token = getDecodedToken();
         let userRoles = token[ClaimNames.ROLES];
@@ -57,6 +56,5 @@ export const AuthProvider = (props) => {
         {props.children}
     </AuthContext.Provider>
 }
-// Geolocation
-// Global Error Handler
-// navigator.geolocation.getCurrentPosition((position) => { console.log(position) })
+//FileUpload, SelectBox
+// SignalR => Canlı veri akışı

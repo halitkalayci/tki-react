@@ -125,3 +125,6 @@ form>div{
 .cursor-pointer{
   cursor: pointer;
 }
+.mw-100{
+  max-width: 100%;
+}
