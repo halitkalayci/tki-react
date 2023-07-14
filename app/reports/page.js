@@ -17,13 +17,37 @@ function Reports() {
     })
   }
 
+  const cols = [
+    { field: 'id', header: 'ID' },
+    { field: 'kilometer', header: 'Kilometer' },
+    { field: 'plate', header: 'Plate' },
+];
+
+  const exportPdf = () => {
+    import('jspdf').then((jsPDF) => {
+        import('jspdf-autotable').then(() => {
+            const doc = new jsPDF.default(0, 0);
+            const exportColumns = cols.map((col) => ({ title: col.header, dataKey: col.field }));
+            doc.autoTable(exportColumns, cars);
+            console.log(doc);
+            var img = new Image()
+            img.src = "logo.png";
+            doc.addImage(img, 'png', 120, 0, 15, 15)
+            doc.save('cars.pdf');
+        });
+    });
+  }
+
 
   const imageColumnTemplate = (row) => {
     return <img className='table-img' src={row.image}></img>
   }
 
   const headerTemplate = () => {
-    return <div> <Button onClick={exportExcel} label='Export Excel' severity='info'></Button> </div>
+    return <div> 
+        <Button onClick={exportExcel} label='Export Excel' severity='info'></Button> 
+        <Button onClick={exportPdf} label='Export PDF' severity='success' className='mx-2'></Button>
+        </div>
   }
 
   const saveAsExcelFile = (buffer, fileName) => {
@@ -34,7 +58,6 @@ function Reports() {
             const data = new Blob([buffer], {
                 type: EXCEL_TYPE
             });
-
             module.default.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
         }
     });
@@ -43,9 +66,10 @@ function Reports() {
   const exportExcel = () => {
     import('xlsx').then((xlsx) => {
         // databaseden raporlanacak veriyi tekrar al.
-        console.log(cars);
-        const worksheet = xlsx.utils.json_to_sheet(cars);
+        let dataToExport = cars.map(i=> { return {id:i.id, kilometer:i.kilometer, plate:i.plate, kurum:"TKI"}  })
+        const worksheet = xlsx.utils.json_to_sheet(dataToExport);
         const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+        // byte[]
         const excelBuffer = xlsx.write(workbook, {
             bookType: 'xlsx',
             type: 'array'
