@@ -16,8 +16,6 @@ function Chat() {
     let connection = new signalR.HubConnectionBuilder().withUrl("http://localhost:5210/api/chathub").build();
 
     setConnection(connection);
-
-   
   }
   useEffect(() => {
     if(!connection) return;
@@ -49,3 +47,6 @@ function Chat() {
 }
 
 export default Chat
+
+// socket.io  => nodejs
+// görüntülü live data

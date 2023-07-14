@@ -131,3 +131,7 @@ form>div{
 .text-right{
   text-align: right;
 }
+.table-img{
+  max-width: 200px;
+  max-height: 200px;
+}
