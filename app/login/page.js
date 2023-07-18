@@ -60,6 +60,7 @@ function Login() {
                     == 1 && response.data.accessToken == null) {
                     // Dialog açıp
                     setShowEmailPopup(true);
+                    return;
                 }
                 let token = response.data.accessToken.token;
                 localStorage.setItem('token', token);
