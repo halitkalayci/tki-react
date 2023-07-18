@@ -10,7 +10,7 @@ function Navbar() {
 	const [authenticated, setAuthenticated] = useState(false)
 	const authContext = useContext(AuthContext);
 	const navigate = useRouter();
-
+	const [showDropdown, setShowDropdown] = useState(false)
 	useEffect(() => {
 		setUserInformation(authContext.getDecodedToken());
 		setAuthenticated(authContext.isAuthenticated);
@@ -51,13 +51,14 @@ function Navbar() {
 							<a
 								className="nav-link dropdown-toggle"
 								href="#"
+								onClick={() => setShowDropdown(!showDropdown)}
 								role="button"
 								data-bs-toggle="dropdown"
 								aria-expanded="false"
 							>
 								Dropdown
 							</a>
-							<ul className="dropdown-menu">
+							<ul className={"dropdown-menu " +( showDropdown ? 'show':'')}>
 								<li>
 									<a className="dropdown-item" href="#">
 										Action
