@@ -5,8 +5,9 @@ import Link from "next/link";
 import {useRouter} from "next/navigation";
 import React, {useContext, useEffect, useState} from "react";
 import './navbar.css'
-
+import {Menubar} from "primereact/menubar"
 function Navbar() {
+	const [menuItems, setMenuItems] = useState([]);
 	const [userInformation, setUserInformation] = useState({});
 	const [authenticated, setAuthenticated] = useState(false)
 	const authContext = useContext(AuthContext);
@@ -17,6 +18,115 @@ function Navbar() {
 		setUserInformation(authContext.getDecodedToken());
 		setAuthenticated(authContext.isAuthenticated);
 	}, [authContext]);
+
+	useEffect(() => {
+		fetchMenuItems();
+	}, [])
+	// TODO: Backendden gelen veriyi primereactin anlayabileceği bir menü verisi haline çevirmek.
+	const fetchMenuItems = () => {
+		setMenuItems([
+			{
+				label: 'File',
+				icon: 'pi pi-fw pi-file',
+				event: () => {
+					// Tıklandığında çalışacak fonksiyon..
+				}
+			},
+			{
+				label: 'Edit',
+				icon: 'pi pi-fw pi-pencil',
+				items: [
+					{
+						label: 'Left',
+						icon: 'pi pi-fw pi-align-left'
+					},
+					{
+						label: 'Right',
+						icon: 'pi pi-fw pi-align-right'
+					},
+					{
+						label: 'Center',
+						icon: 'pi pi-fw pi-align-center'
+					},
+					{
+						label: 'Justify',
+						icon: 'pi pi-fw pi-align-justify'
+					},
+	
+				]
+			},
+			{
+				label: 'Users',
+				icon: 'pi pi-fw pi-user',
+				items: [
+					{
+						label: 'New',
+						icon: 'pi pi-fw pi-user-plus',
+	
+					},
+					{
+						label: 'Delete',
+						icon: 'pi pi-fw pi-user-minus',
+	
+					},
+					{
+						label: 'Search',
+						icon: 'pi pi-fw pi-users',
+						items: [
+							{
+								label: 'Filter',
+								icon: 'pi pi-fw pi-filter',
+								items: [
+									{
+										label: 'Print',
+										icon: 'pi pi-fw pi-print'
+									}
+								]
+							},
+							{
+								icon: 'pi pi-fw pi-bars',
+								label: 'List'
+							}
+						]
+					}
+				]
+			},
+			{
+				label: 'Events',
+				icon: 'pi pi-fw pi-calendar',
+				items: [
+					{
+						label: 'Edit',
+						icon: 'pi pi-fw pi-pencil',
+						items: [
+							{
+								label: 'Save',
+								icon: 'pi pi-fw pi-calendar-plus'
+							},
+							{
+								label: 'Delete',
+								icon: 'pi pi-fw pi-calendar-minus'
+							}
+						]
+					},
+					{
+						label: 'Archive',
+						icon: 'pi pi-fw pi-calendar-times',
+						items: [
+							{
+								label: 'Remove',
+								icon: 'pi pi-fw pi-calendar-minus'
+							}
+						]
+					}
+				]
+			},
+			{
+				label: 'Quit',
+				icon: 'pi pi-fw pi-power-off'
+			}
+		])
+	}
 
 	const toggleDropdown = (key) => {
 		let newDropdown = {...dropdowns};
@@ -29,129 +139,9 @@ function Navbar() {
 	}, [dropdowns])
 
 	return (
-		<nav className="navbar navbar-expand-lg bg-body-tertiary">
-			<div className="container-fluid">
-				<Link className="navbar-brand" href="/">
-					<img src="images/logo.png" className="navbar-logo w-100"/>
-				</Link>
-				<button
-					className="navbar-toggler"
-					type="button"
-					data-bs-toggle="collapse"
-					data-bs-target="#navbarSupportedContent"
-					aria-controls="navbarSupportedContent"
-					aria-expanded="false"
-					aria-label="Toggle navigation"
-				>
-					<span className="navbar-toggler-icon"></span>
-				</button>
-				<div className="collapse navbar-collapse" id="navbarSupportedContent">
-					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
-						<li className="nav-item">
-							<a className="nav-link active" aria-current="page" href="#">
-								Home
-							</a>
-						</li>
-						{authContext.isAuthorized(["Moderator"]) && (
-							<li className="nav-item">
-								<a className="nav-link" href="#">
-									Araba Ekle
-								</a>
-							</li>
-						)}
-						<li className="nav-item dropdown">
-							<a
-								className="nav-link dropdown-toggle"
-								href="#"
-								onClick={() => toggleDropdown("cars")}
-								role="button"
-								data-bs-toggle="dropdown"
-								aria-expanded="false"
-							>
-								Araba
-							</a>
-							<ul className={"dropdown-menu " +( dropdowns.cars ? 'show':'')}>
-								{authContext.isAuthorized(["Cars.Add","Admin"]) && <li>
-									<a className="dropdown-item" href="#">
-										Araba Ekle
-									</a>
-								</li>}
-								{authContext.isAuthorized(["Cars.Get","Admin"]) && <li>
-									<a className="dropdown-item" href="#">
-										Liste
-									</a>
-								</li>}
-							</ul>
-						</li>
-
-						<li className="nav-item dropdown">
-							<a
-								className="nav-link dropdown-toggle"
-								href="#"
-								onClick={() => toggleDropdown("brands")}
-								role="button"
-								data-bs-toggle="dropdown"
-								aria-expanded="false"
-							>
-								Marka
-							</a>
-							<ul className={"dropdown-menu " +( dropdowns.brands ? 'show':'')}>
-								<li>
-									<a className="dropdown-item" href="#">
-										Marka Ekle
-									</a>
-								</li>
-								<li>
-									<a className="dropdown-item" href="#">
-										Liste
-									</a>
-								</li>
-							</ul>
-						</li>
-						<li suppressHydrationWarning className="nav-item">
-							{authenticated ? (
-								<a href="#" className="nav-link">
-									Hoşgeldiniz, {userInformation[ClaimNames.NAME]}
-								</a>
-							) : (
-								<>
-									<Link href="/login" className="nav-link">
-										Giriş Yap
-									</Link>
-								</>
-							)}
-						</li>
-						{authenticated ? (
-							<li className="nav-item">
-								<a
-									onClick={() => {
-										localStorage.removeItem("token");
-										authContext.setIsAuthenticated(false);
-										navigate.push("/login");
-									}}
-									className="nav-link cursor-pointer"
-								>
-									Çıkış Yap
-								</a>
-							</li>
-						) : (
-							<></>
-						)}
-					</ul>
-					<form className="d-flex" role="search">
-						<input
-							className="form-control me-2"
-							type="search"
-							placeholder="Search"
-							aria-label="Search"
-						/>
-						<button className="btn btn-outline-success" type="submit">
-							Search
-						</button>
-					</form>
-				</div>
-			</div>
-		</nav>
+		<div className="card">
+			<Menubar model={menuItems}/>
+		</div>
 	);
 }
 
