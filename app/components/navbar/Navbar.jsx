@@ -4,6 +4,7 @@ import {AuthContext} from "@/app/contexts/AuthContext";
 import Link from "next/link";
 import {useRouter} from "next/navigation";
 import React, {useContext, useEffect, useState} from "react";
+import './navbar.css'
 
 function Navbar() {
 	const [userInformation, setUserInformation] = useState({});
@@ -11,17 +12,28 @@ function Navbar() {
 	const authContext = useContext(AuthContext);
 	const navigate = useRouter();
 	const [showDropdown, setShowDropdown] = useState(false)
+	const [dropdowns, setDropdowns] = useState({cars:false, brands:false})
 	useEffect(() => {
 		setUserInformation(authContext.getDecodedToken());
 		setAuthenticated(authContext.isAuthenticated);
 	}, [authContext]);
 
+	const toggleDropdown = (key) => {
+		let newDropdown = {...dropdowns};
+		newDropdown[key] = !dropdowns[key]
+		setDropdowns(newDropdown);
+	}
+
+	useEffect(() => {
+		console.log(dropdowns);
+	}, [dropdowns])
+
 	return (
 		<nav className="navbar navbar-expand-lg bg-body-tertiary">
 			<div className="container-fluid">
-				<a className="navbar-brand" href="#">
-					Navbar
-				</a>
+				<Link className="navbar-brand" href="/">
+					<img src="images/logo.png" className="navbar-logo w-100"/>
+				</Link>
 				<button
 					className="navbar-toggler"
 					type="button"
@@ -51,30 +63,47 @@ function Navbar() {
 							<a
 								className="nav-link dropdown-toggle"
 								href="#"
-								onClick={() => setShowDropdown(!showDropdown)}
+								onClick={() => toggleDropdown("cars")}
 								role="button"
 								data-bs-toggle="dropdown"
 								aria-expanded="false"
 							>
-								Dropdown
+								Araba
 							</a>
-							<ul className={"dropdown-menu " +( showDropdown ? 'show':'')}>
+							<ul className={"dropdown-menu " +( dropdowns.cars ? 'show':'')}>
+								{authContext.isAuthorized(["Cars.Add","Admin"]) && <li>
+									<a className="dropdown-item" href="#">
+										Araba Ekle
+									</a>
+								</li>}
+								{authContext.isAuthorized(["Cars.Get","Admin"]) && <li>
+									<a className="dropdown-item" href="#">
+										Liste
+									</a>
+								</li>}
+							</ul>
+						</li>
+
+						<li className="nav-item dropdown">
+							<a
+								className="nav-link dropdown-toggle"
+								href="#"
+								onClick={() => toggleDropdown("brands")}
+								role="button"
+								data-bs-toggle="dropdown"
+								aria-expanded="false"
+							>
+								Marka
+							</a>
+							<ul className={"dropdown-menu " +( dropdowns.brands ? 'show':'')}>
 								<li>
 									<a className="dropdown-item" href="#">
-										Action
+										Marka Ekle
 									</a>
 								</li>
 								<li>
 									<a className="dropdown-item" href="#">
-										Another action
-									</a>
-								</li>
-								<li>
-									<hr className="dropdown-divider" />
-								</li>
-								<li>
-									<a className="dropdown-item" href="#">
-										Something else here
+										Liste
 									</a>
 								</li>
 							</ul>
