@@ -163,7 +163,7 @@ function Navbar() {
 	}
 
 	const getVisibleStatus = (menuItem) => {
-		let isAuthenticated = authenticated;
+		let isAuthenticated = authContext.isAuthenticated;
 		if (menuItem.hideOnAuth && isAuthenticated) return false;
 		if (!menuItem.roles || menuItem.roles.length <= 0) return (!menuItem.showOnAuth || isAuthenticated)
 		if (!isAuthenticated) return false;
@@ -171,8 +171,14 @@ function Navbar() {
 	}
 
 	const logout = () => {
-
+		localStorage.removeItem('token');
+		navigate.push('/login');
+		authContext.setIsAuthenticated(false);
+		authContext.showToastr({severity:'success',detail:'Başarıyla çıkış yapıldı.',summary:'Başarılı'})
 	}
+
+
+
 	const toggleDropdown = (key) => {
 		let newDropdown = {...dropdowns};
 		newDropdown[key] = !dropdowns[key]
