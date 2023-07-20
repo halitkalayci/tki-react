@@ -1,10 +1,10 @@
 'use client';
 import React, { useState } from 'react';
-import styles from '../page.module.css';
+import styles from '../../../page.module.css';
 import * as Yup from 'yup';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
-import axiosInstance from '../utilities/axiosInterceptors';
+import axiosInstance from '@/app/utilities/axiosInterceptors';
 function CreateCar() {
     const [imageBase64, setImageBase64] = useState('');
 
