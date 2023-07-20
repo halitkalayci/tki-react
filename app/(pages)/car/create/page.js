@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
 import axiosInstance from '@/app/utilities/axiosInterceptors';
+import FormGroup from '@/app/components/form-group/FormGroup';
 function CreateCar() {
     const [imageBase64, setImageBase64] = useState('');
 
@@ -47,22 +48,9 @@ function CreateCar() {
                 }}
             >
                 <Form>
-                    <div className="form-group">
-                        <label>Resim</label>
-                        <Field onChange={onImageChange} type="file" name="image" className="form-control"></Field>
-                        <ErrorMessage name="image"></ErrorMessage>
-                    </div>
-
-                    <div className="form-group">
-                        <label>Kilometre</label>
-                        <Field name="kilometer" className="form-control"></Field>
-                        <ErrorMessage name="kilometer"></ErrorMessage>
-                    </div>
-                    <div className="form-group">
-                        <label>Plaka</label>
-                        <Field name="plate" className="form-control"></Field>
-                        <ErrorMessage name="plate"></ErrorMessage>
-                    </div>
+                    <FormGroup type="file" name="image" label="Resim" />
+                    <FormGroup type="number" name="kilometer" label="Kilometre" />
+                    <FormGroup name="plate" label="Plaka" />
                     <div>
                         <Button type="submit" label="Ekle" severity="info" className="w-100"></Button>
                     </div>
