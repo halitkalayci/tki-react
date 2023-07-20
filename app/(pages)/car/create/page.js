@@ -1,14 +1,17 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styles from '../../../page.module.css';
 import * as Yup from 'yup';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
 import axiosInstance from '@/app/utilities/axiosInterceptors';
 import FormGroup from '@/app/components/form-group/FormGroup';
+import { AuthContext } from '@/app/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 function CreateCar() {
     const [imageBase64, setImageBase64] = useState('');
-
+    const authContext = useContext(AuthContext)
+    const navigate = useRouter();
     const addCarInitialValues = {
         kilometer: 0,
         plate: ''
@@ -43,13 +46,14 @@ function CreateCar() {
                 validationSchema={addCarValidationSchema}
                 onSubmit={(values) => {
                     axiosInstance.post('Cars', { ...values, image: imageBase64 }).then((response) => {
-                        // kullanıcıyı uyarmak.
+                        authContext.showToastr({ severity: 'success', detail: 'Araba eklendi' })
+                        navigate.push("/car/list")
                     });
                 }}
             >
                 <Form>
-                    <FormGroup type="file" name="image" label="Resim" />
-                    <FormGroup type="number" name="kilometer" label="Kilometre" />
+                    <FormGroup onChange={onImageChange} type="file" name="image" label="Resim" />
+                    <FormGroup type="text" name="kilometer" label="Kilometre" />
                     <FormGroup name="plate" label="Plaka" />
                     <div>
                         <Button type="submit" label="Ekle" severity="info" className="w-100"></Button>
