@@ -162,7 +162,11 @@ function Navbar() {
 	}
 
 	const getVisibleStatus = (menuItem) => {
-		return true;
+		let isAuthenticated = authenticated;
+		if (menuItem.hideOnAuth && isAuthenticated) return false;
+		if (!menuItem.roles || menuItem.roles.length <= 0) return (!item.showOnAuth || isAuthenticated)
+		if (!isAuthenticated) return false;
+		return authContext.isAuthorized(menuItem.roles);
 	}
 
 	const logout = () => {
