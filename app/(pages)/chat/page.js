@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import * as signalR from '@microsoft/signalr';
-import styles from '../page.module.css';
+import styles from '../../page.module.css';
 import { Button } from 'primereact/button';
 import './chat.css';
 function Chat() {
