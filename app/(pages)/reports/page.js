@@ -1,11 +1,11 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import styles from '../page.module.css';
-import axiosInstance from '../utilities/axiosInterceptors';
+import styles from '../../page.module.css';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { MultiSelect } from 'primereact/multiselect';
+import axiosInstance from '@/app/utilities/axiosInterceptors';
 function Reports() {
     const cols = [
         { field: 'id', header: 'ID' },
