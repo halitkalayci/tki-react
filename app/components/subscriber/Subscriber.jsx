@@ -1,26 +1,21 @@
-"use client"
-import { AuthContext } from '@/app/contexts/AuthContext'
+'use client';
+import { AuthContext } from '@/app/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react';
 
 export default function Subscriber() {
+    const authContext = useContext(AuthContext);
+    const navigation = useRouter();
 
-  const authContext = useContext(AuthContext);
-  const navigation = useRouter();
-  
-  // Dinleyicilerin oluşturulması..
-  useEffect(() => {
-    window.addEventListener('toastr',(e) => {
-        authContext.showToastr(e.detail);
-    })
-    window.addEventListener('redirectToLogin', () => {
-        navigation.push("/login")
-    })
-  },[])
+    // Dinleyicilerin oluşturulması..
+    useEffect(() => {
+        window.addEventListener('toastr', (e) => {
+            authContext.showToastr(e.detail);
+        });
+        window.addEventListener('redirectToLogin', () => {
+            navigation.push('/login');
+        });
+    }, []);
 
-  return (
-    <></>
-  )
+    return <></>;
 }
-
-

@@ -1,5 +1,5 @@
-"use client"
-import styles from './page.module.css'
+'use client';
+import styles from './page.module.css';
 import { useContext, useEffect, useState } from 'react';
 import CarList from './components/car-list/CarList';
 import { Paginator } from 'primereact/paginator';
@@ -8,147 +8,161 @@ import axiosInstance from './utilities/axiosInterceptors';
 import { AuthContext } from './contexts/AuthContext';
 import { Dialog } from 'primereact/dialog';
 import QRCode from 'react-qr-code';
-import jwt_decode from "jwt-decode"
-// SSR - CSR 
+import jwt_decode from 'jwt-decode';
+// SSR - CSR
 // Component
 // Functional Component - Class Based Component
 // <div class="x"> </div>
 
-
 // <link href="global.css"/>
 // JSX içerisinde javascript yazmak istediğimizde {} kullanıyoruz
 export default function Home() {
-  let name = "Halit"; // API isteği?
-  // Token'i decode edip?
+    let name = 'Halit'; // API isteği?
+    // Token'i decode edip?
 
+    const clickFunction = () => {
+        alert('Butona tıklandı.');
+    };
+    // forEach
+    // map
+    // jsx içerisinde iterasyonlar her zaman map ile yapılmalı.
+    // iterasyon sonucu ortaya çıkan jsx elemanlarının parentina key value verilmeli
 
+    // ekranda değişikliği takip edilmesi gereken (watchable)
+    // değişkenler reactin belirlediği şekilde oluşturulmalı.
 
-  const clickFunction = () => {
-    alert("Butona tıklandı.")
-  }
-  // forEach
-  // map
-  // jsx içerisinde iterasyonlar her zaman map ile yapılmalı.
-  // iterasyon sonucu ortaya çıkan jsx elemanlarının parentina key value verilmeli
+    // React Hooks => useX useY
+    // useEffect => sayfa açılışı ve depList'deki değerlerin değişimini takip etme olanağı
+    let number = 0; // klasik javascript variable tanımlama syntaxi
+    const [count, setCount] = useState(0);
+    // getter  setter
 
-  // ekranda değişikliği takip edilmesi gereken (watchable)
-  // değişkenler reactin belirlediği şekilde oluşturulmalı.
+    useEffect(() => {
+        console.log(count);
+    }, [count]);
+    // custom watcher
+    const authContext = useContext(AuthContext);
 
-  // React Hooks => useX useY
-  // useEffect => sayfa açılışı ve depList'deki değerlerin değişimini takip etme olanağı
-  let number = 0; // klasik javascript variable tanımlama syntaxi
-  const [count, setCount] = useState(0);
-  // getter  setter
+    useEffect(() => {
+        console.log(authContext.getDecodedToken());
+        fetchCarsFromAPI();
 
-  useEffect(() => {
-    console.log(count);
-  }, [count]);
-  // custom watcher
-  const authContext = useContext(AuthContext);
+        let token = localStorage.getItem('token');
+        let decodedToken = jwt_decode(token);
+        console.log(decodedToken);
 
-  useEffect(() => {
-    console.log(authContext.getDecodedToken());
-    fetchCarsFromAPI();
+        if (Date.now() >= decodedToken['exp'] * 1000) {
+            console.log('token süresi geçmiş');
+        }
+    }, []);
 
-    let token = localStorage.getItem("token");
-    let decodedToken = jwt_decode(token);
-    console.log(decodedToken);
+    const [cars, setCars] = useState({});
+    const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5, first: 0 });
+    const fetchCarsFromAPI = () => {
+        axiosInstance.get('Cars?PageIndex=' + pagination.pageIndex + '&PageSize=' + pagination.pageSize).then((response) => {
+            setCars(response.data);
+        });
+    };
 
-    if ( Date.now() >= decodedToken["exp"] * 1000){
-      console.log("token süresi geçmiş")
-    }
-  }, []);
+    useEffect(() => {
+        fetchCarsFromAPI();
+    }, [pagination]);
 
-  const [cars, setCars] = useState({})
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5,first:0 })
-  const fetchCarsFromAPI = () => {
-    axiosInstance.get('Cars?PageIndex=' + pagination.pageIndex + '&PageSize=' + pagination.pageSize)
-      .then(response => {
-        setCars(response.data);
-      })
-  }
+    const onPageChange = (e) => {
+        setPagination({ ...pagination, pageIndex: e.page, ...e }); // async
+        //fetchCarsFromAPI(); // async işlem bitmiş gibi
+    };
+    // n adet useEffect n adet useState
+    // watcher
 
-  useEffect(() => {
-    fetchCarsFromAPI();
-  }, [pagination])
+    // class => className
 
-  const onPageChange = (e) => {
-    setPagination({ ...pagination, pageIndex: e.page, ...e }) // async
-    //fetchCarsFromAPI(); // async işlem bitmiş gibi
-  }
-  // n adet useEffect n adet useState
-  // watcher
+    // tek bir dosyada html içinde js çalıştırabilmek
+    // {}
+    // CTRL + SPACE => Intellisense'i trigger eder
 
-  // class => className 
+    // Arrow Anonm. Function =>  () => {}
+    // Classic Anonm. Function => function() { }
 
-  // tek bir dosyada html içinde js çalıştırabilmek
-  // {}
-  // CTRL + SPACE => Intellisense'i trigger eder
+    // Arrow Function => const increase = () => {}
+    // Classic Function => function increase() {}
 
-  // Arrow Anonm. Function =>  () => {}
-  // Classic Anonm. Function => function() { }
+    const [dialogVisible, setDialogVisible] = useState(false);
+    const [qrCodeKey, setQrCodeKey] = useState('');
+    const [otpVerifyCode, setOtpVerifyCode] = useState('');
+    const enableOtp = () => {
+        axiosInstance.post('Auth/enable-otp').then((response) => {
+            let securityKey = response.data.securityKey;
+            let qrKey = 'otpauth://totp/TKIRentACar?secret=' + securityKey;
+            setQrCodeKey(qrKey);
+            setDialogVisible(true);
+        });
+    };
 
-  // Arrow Function => const increase = () => {}
-  // Classic Function => function increase() {}
+    const verifyOtp = () => {
+        console.log(otpVerifyCode);
+        axiosInstance.post('Auth/verify-otp', { code: otpVerifyCode, userId: 0 }).then((response) => {
+            console.log(response);
+        });
+    };
 
-  const [dialogVisible, setDialogVisible] = useState(false);
-  const [qrCodeKey, setQrCodeKey] = useState("")
-  const [otpVerifyCode, setOtpVerifyCode] = useState("")
-  const enableOtp = () => {
-    axiosInstance.post("Auth/enable-otp").then(response => {
-      let securityKey = response.data.securityKey;
-      let qrKey = "otpauth://totp/TKIRentACar?secret=" + securityKey;
-      setQrCodeKey(qrKey);
-      setDialogVisible(true);
-    })
-  }
+    const enableEmailOtp = () => {
+        axiosInstance.post('Auth/enable-email-otp').then((response) => {
+            authContext.showToastr({ severity: 'success', summary: 'Başarılı', detail: 'Email gönderildi.' });
+        });
+    };
+    return (
+        <main className={styles.main}>
+            <div className="row">
+                <div className="col-12 mb-3">
+                    <Button onClick={enableOtp} label="OTP Aktif Et" severity="info">
+                        {' '}
+                    </Button>
+                    <Button className="mx-2" onClick={enableEmailOtp} label="Email OTP Aktif Et" severity="info">
+                        {' '}
+                    </Button>
+                </div>
 
-  const verifyOtp = () => {
-      console.log(otpVerifyCode);
-      axiosInstance.post("Auth/verify-otp", {code:otpVerifyCode, userId:0}).then(response => {
-        console.log(response);
-      })
-  }
+                {cars?.items?.map((car) => (
+                    <div key={car.id} className="col-3 mb-3">
+                        <CarList car={car}></CarList>
+                    </div>
+                ))}
 
-  const enableEmailOtp = () => {
-      axiosInstance.post("Auth/enable-email-otp").then(response => {
-         authContext.showToastr({severity:"success", summary:'Başarılı' ,detail:"Email gönderildi."})
-      })
-  }
-  return (
-    <main className={styles.main}>
-      <div className='row'>
-        <div className='col-12 mb-3'>
-          <Button onClick={enableOtp} label='OTP Aktif Et' severity='info'> </Button>
-          <Button className='mx-2' onClick={enableEmailOtp} label='Email OTP Aktif Et' severity='info'> </Button>
-        </div>
+                <div className="col-12">
+                    <Paginator first={pagination.first} rows={5} totalRecords={cars.count} onPageChange={onPageChange} />
+                </div>
+            </div>
 
-        {cars?.items?.map(car => <div key={car.id} className='col-3 mb-3'>
-          <CarList car={car}></CarList>
-        </div>)}
-
-        <div className='col-12'>
-          <Paginator first={pagination.first} rows={5} totalRecords={cars.count} onPageChange={onPageChange} />
-        </div>
-
-
-      </div>
-
-      <Dialog visible={dialogVisible} header="OTP Aktif Et">
-        <form>
-          <QRCode value={qrCodeKey}></QRCode>
-          <div className='form-group'>
-            <label>OTP Code</label>
-            <input value={otpVerifyCode} onChange={(e) => { setOtpVerifyCode(e.target.value) }} className="form-control" type="text" />
-          </div>
-          <div>
-            <Button type='button' onClick={() => { setDialogVisible(false) }} label='Vazgeç' severity='danger'></Button>
-            <Button type='button' onClick={verifyOtp} label='Onayla' severity='info'></Button>
-          </div>
-        </form>
-      </Dialog>
-    </main>
-  )
+            <Dialog visible={dialogVisible} header="OTP Aktif Et">
+                <form>
+                    <QRCode value={qrCodeKey}></QRCode>
+                    <div className="form-group">
+                        <label>OTP Code</label>
+                        <input
+                            value={otpVerifyCode}
+                            onChange={(e) => {
+                                setOtpVerifyCode(e.target.value);
+                            }}
+                            className="form-control"
+                            type="text"
+                        />
+                    </div>
+                    <div>
+                        <Button
+                            type="button"
+                            onClick={() => {
+                                setDialogVisible(false);
+                            }}
+                            label="Vazgeç"
+                            severity="danger"
+                        ></Button>
+                        <Button type="button" onClick={verifyOtp} label="Onayla" severity="info"></Button>
+                    </div>
+                </form>
+            </Dialog>
+        </main>
+    );
 }
 // Component-Base
 // Single Page Application => Javascript => React (Next.Js),Angular,Vue,Svelte
