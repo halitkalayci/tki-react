@@ -124,6 +124,7 @@ function Navbar() {
 	useEffect(() => {
 		setUserInformation(authContext.getDecodedToken());
 		setAuthenticated(authContext.isAuthenticated);
+		fetchMenuItems();
 	}, [authContext]);
 
 	useEffect(() => {
@@ -164,7 +165,7 @@ function Navbar() {
 	const getVisibleStatus = (menuItem) => {
 		let isAuthenticated = authenticated;
 		if (menuItem.hideOnAuth && isAuthenticated) return false;
-		if (!menuItem.roles || menuItem.roles.length <= 0) return (!item.showOnAuth || isAuthenticated)
+		if (!menuItem.roles || menuItem.roles.length <= 0) return (!menuItem.showOnAuth || isAuthenticated)
 		if (!isAuthenticated) return false;
 		return authContext.isAuthorized(menuItem.roles);
 	}
