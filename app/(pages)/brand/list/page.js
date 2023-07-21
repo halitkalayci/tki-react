@@ -18,6 +18,7 @@ function BrandList() {
     const [brands, setBrands] = useState([])
     const [selectedBrands, setSelectedBrands] = useState([])
     const [imageBase64, setImageBase64] = useState("")
+    const [globalFilter, setGlobalFilter] = useState("")
     useEffect(() => {
         fetchBrands();
     }, [])
@@ -141,11 +142,14 @@ function BrandList() {
     const dataTableHeader = () => {
         return <>
             <div className='row'>
-                <div className='col-5'>
+                <div className='col-4'>
                     <Button onClick={() => { setAddDialogOpen(true) }} label='Yeni Ekle' className='w-100' severity='info'></Button>
                 </div>
-                <div className='col-5'>
+                <div className='col-4'>
                     <Button onClick={() => { deleteAllSelected() }} label='Seçilenleri Sil' className='w-100' severity='danger'></Button>
+                </div>
+                <div className='col-4'>
+                    <input className='form-control' placeholder='Filter..' value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} />
                 </div>
             </div>
         </>
@@ -154,8 +158,10 @@ function BrandList() {
     return (
         <>
             <main className={styles.main}>
-
-                <DataTable onSelectionChange={(e) => setSelectedBrands(e.value)} selection={selectedBrands} header={dataTableHeader} onRowEditComplete={(e) => { rowEditCompleted(e) }} editMode='row' value={brands} paginator rows={10}>
+                <DataTable globalFilter={globalFilter} onSelectionChange={(e) => setSelectedBrands(e.value)}
+                    selection={selectedBrands} header={dataTableHeader}
+                    onRowEditComplete={(e) => { rowEditCompleted(e) }} editMode='row' value={brands}
+                    paginator rows={10}>
                     <Column selectionMode="multiple" exportable={false}></Column>
                     <Column header="ID" field="id"></Column>
                     <Column editor={textEditor} header="Ad" field="name"></Column>
