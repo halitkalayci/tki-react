@@ -108,7 +108,9 @@ function BrandList() {
     const submitAddForm = (values) => {
         let request = { ...values, logo: imageBase64 };
         axiosInstance.post("Brands", request).then(response => {
-            //
+            authContext.showToastr({ severity: 'success', detail: "Marka başarıyla eklendi" });
+            setAddDialogOpen(false);
+            fetchBrands();
         })
     }
 
