@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { ErrorTypes } from '../constants/errorTypes';
 import jwt_decode from 'jwt-decode';
+
+
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:5210/api/',
     withCredentials: true
@@ -10,19 +12,20 @@ const axiosInstance = axios.create({
 // token varsa yenileyip requesti öyle göndermek.
 
 axiosInstance.interceptors.request.use((config) => {
-    console.log('İstek gönderiliyor.');
-    // token varmı, süresi geçmiş mi? => yenile ve sonra isteği gönder.
+    window.dispatchEvent(new Event("requestStart"))
     config.headers.Authorization = 'Bearer ' + localStorage.getItem('token');
     return config;
 });
 
 axiosInstance.interceptors.response.use(
     (response) => {
+        window.dispatchEvent(new Event("requestEnd"))
         console.log('Cevap alındı.');
         //
         return response;
     },
     async (error) => {
+        window.dispatchEvent(new Event("requestEnd"))
         // Hata bir business error mu? => toastr error.detail
         // Backenddeki hata kalıplarını karşılayacak kodlar
 

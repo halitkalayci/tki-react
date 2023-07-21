@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { AuthContext, AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/navbar/Navbar';
 import Subscriber from './components/subscriber/Subscriber';
-
+import { LoaderProvider } from './contexts/LoaderContext';
 // Global importlar burada.
 
 const inter = Inter({ subsets: ['latin'] });
@@ -21,11 +21,13 @@ export default function RootLayout({ children }) {
     return (
         <html lang="en">
             <body className={inter.className}>
-                <AuthProvider>
-                    <Subscriber />
-                    <Navbar></Navbar>
-                    {children}
-                </AuthProvider>
+                <LoaderProvider>
+                    <AuthProvider>
+                        <Subscriber />
+                        <Navbar></Navbar>
+                        {children}
+                    </AuthProvider>
+                </LoaderProvider>
             </body>
         </html>
     );
