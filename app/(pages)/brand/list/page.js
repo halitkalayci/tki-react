@@ -16,6 +16,7 @@ function BrandList() {
     const [addDialogOpen, setAddDialogOpen] = useState(false)
     const authContext = useContext(AuthContext);
     const [brands, setBrands] = useState([])
+    const [selectedBrands, setSelectedBrands] = useState([])
     const [imageBase64, setImageBase64] = useState("")
     useEffect(() => {
         fetchBrands();
@@ -129,11 +130,22 @@ function BrandList() {
         </>
     }
 
+    const deleteAllSelected = () => {
+        selectedBrands.forEach(brand => {
+            axiosInstance.delete("brands/" + brand.id).then(response => {
+            });
+        })
+        authContext.showToastr({ severity: 'success', detail: 'Seçilen tüm markalar silindi.' });
+    }
+
     const dataTableHeader = () => {
         return <>
             <div className='row'>
                 <div className='col-5'>
                     <Button onClick={() => { setAddDialogOpen(true) }} label='Yeni Ekle' className='w-100' severity='info'></Button>
+                </div>
+                <div className='col-5'>
+                    <Button onClick={() => { deleteAllSelected() }} label='Seçilenleri Sil' className='w-100' severity='danger'></Button>
                 </div>
             </div>
         </>
@@ -143,7 +155,8 @@ function BrandList() {
         <>
             <main className={styles.main}>
 
-                <DataTable header={dataTableHeader} onRowEditComplete={(e) => { rowEditCompleted(e) }} editMode='row' value={brands} paginator rows={10}>
+                <DataTable onSelectionChange={(e) => setSelectedBrands(e.value)} selection={selectedBrands} header={dataTableHeader} onRowEditComplete={(e) => { rowEditCompleted(e) }} editMode='row' value={brands} paginator rows={10}>
+                    <Column selectionMode="multiple" exportable={false}></Column>
                     <Column header="ID" field="id"></Column>
                     <Column editor={textEditor} header="Ad" field="name"></Column>
                     <Column editor={imgEditor} body={imageTemplate} header="Logo" field="logo"></Column>
