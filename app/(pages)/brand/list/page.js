@@ -7,8 +7,13 @@ import { Column } from 'primereact/column';
 import axios from 'axios';
 import { AuthContext } from '@/app/contexts/AuthContext';
 import './brandlist.css'
+import { Dialog } from 'primereact/dialog';
+import { Button } from 'primereact/button';
+import { Form, Formik } from 'formik';
+import FormGroup from '@/app/components/form-group/FormGroup';
 function BrandList() {
     const [isLoading, setIsLoading] = useState(true);
+    const [addDialogOpen, setAddDialogOpen] = useState(false)
     const authContext = useContext(AuthContext);
     const [brands, setBrands] = useState([])
     const [imageBase64, setImageBase64] = useState("")
@@ -84,20 +89,65 @@ function BrandList() {
             fetchBrands();
         })
     }
+
+    const initialValues = {
+        name: '',
+        logo: ''
+    }
+    const getBase64 = (event) => {
+        let reader = new FileReader();
+        reader.onload = () => {
+            setImageBase64(reader.result);
+        };
+        reader.onerror = (error) => {
+            console.log('HATA: ', error);
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+    const submitAddForm = (values) => {
+        let request = { ...values, logo: imageBase64 };
+        axiosInstance.post("Brands", request).then(response => {
+            //
+        })
+    }
+
+    const AddFormDialog = () => {
+        return <>
+            <Dialog header="Marka Ekle" visible={addDialogOpen} onHide={() => { setAddDialogOpen(false) }}>
+                <Formik onSubmit={submitAddForm} initialValues={initialValues}>
+                    <Form>
+                        <FormGroup label="Marka Adı" name="name" type="text"></FormGroup>
+                        <FormGroup onChange={(e) => getBase64(e)} label="Logo" name="logo" type="file"></FormGroup>
+                        <Button className='mx-3' severity='danger' type='button' onClick={() => { setAddDialogOpen(false) }} label='Vazgeç'></Button>
+                        <Button severity='info' type='submit' label='Kaydet'></Button>
+                    </Form>
+                </Formik>
+            </Dialog>
+        </>
+    }
+
+    const dataTableHeader = () => {
+        return <>
+            <div className='row'>
+                <div className='col-5'>
+                    <Button onClick={() => { setAddDialogOpen(true) }} label='Yeni Ekle' className='w-100' severity='info'></Button>
+                </div>
+            </div>
+        </>
+    }
+
     return (
         <>
-            {isLoading && <div class="overlay">
-                <div class="overlay__inner">
-                    <div class="overlay__content"><span class="spinner"></span></div>
-                </div>
-            </div>}
             <main className={styles.main}>
-                <DataTable onRowEditComplete={(e) => { rowEditCompleted(e) }} editMode='row' value={brands} paginator rows={10}>
+
+                <DataTable header={dataTableHeader} onRowEditComplete={(e) => { rowEditCompleted(e) }} editMode='row' value={brands} paginator rows={10}>
                     <Column header="ID" field="id"></Column>
                     <Column editor={textEditor} header="Ad" field="name"></Column>
                     <Column editor={imgEditor} body={imageTemplate} header="Logo" field="logo"></Column>
                     <Column rowEditor headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
                 </DataTable>
+                <AddFormDialog></AddFormDialog>
             </main>
         </>
     )
