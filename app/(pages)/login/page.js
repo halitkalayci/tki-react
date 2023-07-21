@@ -4,13 +4,11 @@ import axios from 'axios';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import './login.css';
-import styles from '../page.module.css';
-import { Toast } from 'primereact/toast';
+import styles from '../../page.module.css';
 import { useRouter } from 'next/navigation';
-import { AuthContext } from '../contexts/AuthContext';
-import jwt_decode from 'jwt-decode';
-import axiosInstance from '../utilities/axiosInterceptors';
 import { Dialog } from 'primereact/dialog';
+import { AuthContext } from '@/app/contexts/AuthContext';
+import axiosInstance from '@/app/utilities/axiosInterceptors';
 // Folder Structure Routing
 function Login() {
     // HTTP Isteği

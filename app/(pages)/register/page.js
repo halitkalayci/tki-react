@@ -1,13 +1,13 @@
 'use client';
 import React, { useContext, useRef, useState } from 'react';
-import styles from '../page.module.css';
+import styles from '../../page.module.css';
 import axios from 'axios';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
 import { useRouter } from 'next/navigation';
-import { AuthContext } from '../contexts/AuthContext';
-import axiosInstance from '../utilities/axiosInterceptors';
+import { AuthContext } from '@/app/contexts/AuthContext';
+import axiosInstance from '@/app/utilities/axiosInterceptors';
 function Register() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');

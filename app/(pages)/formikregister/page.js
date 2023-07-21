@@ -1,12 +1,21 @@
 'use client';
-import React from 'react';
-import styles from '../page.module.css';
+import React, { useState } from 'react';
+import styles from '../../page.module.css';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
 import * as Yup from 'yup';
 import { InputText } from 'primereact/inputtext';
-
+import { Steps } from 'primereact/steps';
 function FormikRegister() {
+    const [step, setStep] = useState(0)
+    const steps = [
+        {
+            label: 'Kişisel Bilgiler'
+        },
+        {
+            label: "Şifre"
+        }
+    ]
     const initialValues = {
         firstName: '',
         lastName: '',
@@ -24,42 +33,52 @@ function FormikRegister() {
     });
     return (
         <main className={styles.main}>
+            <Steps readOnly={false} onSelect={(e) => setStep(e.index)} model={steps} activeIndex={step}></Steps>
             <Formik
                 validationSchema={validationSchema}
                 initialValues={initialValues}
                 onSubmit={(values) => {
-                    console.log(values);
+                    if (step < 1) {
+                        setStep(step + 1);
+                    } else {
+                        // submit..
+                        console.log(values);
+                    }
                 }}
             >
                 <Form>
-                    <div className="form-group">
+                    {step == 0 && <><div className="form-group">
                         <label>Ad</label>
-                        <InputText name="firstName" type="text" />
+                        <Field className="form-control" name="firstName" type="text" />
                         <ErrorMessage name="firstName"></ErrorMessage>
                     </div>
 
-                    <div className="form-group">
-                        <label>Soyad</label>
-                        <Field name="lastName" type="text" />
-                    </div>
+                        <div className="form-group">
+                            <label>Soyad</label>
+                            <Field className="form-control" name="lastName" type="text" />
+                        </div>
 
-                    <div className="form-group">
-                        <label>E-posta</label>
-                        <Field name="email" type="text" />
-                    </div>
+                        <div className="form-group">
+                            <label>E-posta</label>
+                            <Field className="form-control" name="email" type="text" />
+                        </div></>}
 
-                    <div className="form-group">
+                    {step == 1 && <> <div className="form-group">
                         <label>Şifre</label>
-                        <Field name="password" type="password" />
+                        <Field className="form-control" name="password" type="password" />
                     </div>
 
-                    <div className="form-group">
-                        <label>Şifre Tekrar</label>
-                        <Field name="passwordConfirm" type="password" />
-                    </div>
-
+                        <div className="form-group">
+                            <label>Şifre Tekrar</label>
+                            <Field className="form-control" name="passwordConfirm" type="password" />
+                        </div>
+                    </>
+                    }
                     <div>
-                        <Button label="Kayıt Ol" severity="info" className="w-100"></Button>
+                        {
+                            step < 1 ? <Button type='button' onClick={() => setStep(step + 1)} label={step < 1 ? 'İleri' : 'Kayıt Ol'} severity="info" className="w-100"></Button>
+                                : <Button type='submit' label={step < 1 ? 'İleri' : 'Kayıt Ol'} severity="info" className="w-100"></Button>
+                        }
                     </div>
                 </Form>
             </Formik>
