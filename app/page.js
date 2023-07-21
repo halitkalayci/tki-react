@@ -122,6 +122,10 @@ export default function Home() {
                         {' '}
                     </Button>
                 </div>
+                {/*  örnek ödeme ekranı gösterme.
+                <iframe src='https://sandbox-cpp.iyzipay.com?token=a83862b8-9f80-4c92-945e-e131bcb30ea0&lang=tr'>
+
+                </iframe> */}
 
                 {cars?.items?.map((car) => (
                     <div key={car.id} className="col-3 mb-3">
